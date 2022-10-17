@@ -1,5 +1,3 @@
-import { PwaService } from "../../Service/Pwa/Port/PwaService.mjs";
-
 /** @typedef {import("../../../../flux-css-api/src/Adapter/Api/CssApi.mjs").CssApi} CssApi */
 /** @typedef {import("../Pwa/getBackgroundColor.mjs").getBackgroundColor} getBackgroundColor */
 /** @typedef {import("../Pwa/getDirection.mjs").getDirection} getDirection */
@@ -7,6 +5,7 @@ import { PwaService } from "../../Service/Pwa/Port/PwaService.mjs";
 /** @typedef {import("../Pwa/getThemeColor.mjs").getThemeColor} getThemeColor */
 /** @typedef {import("../Pwa/getTranslatedText.mjs").getTranslatedText} getTranslatedText */
 /** @typedef {import("../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").JsonApi} JsonApi */
+/** @typedef {import("../../Service/Pwa/Port/PwaService.mjs").PwaService} PwaService */
 
 const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
 
@@ -98,7 +97,7 @@ export class PwaApi {
      * @returns {Promise<void>}
      */
     async init() {
-        this.#pwa_service ??= this.#getPwaService();
+        this.#pwa_service ??= await this.#getPwaService();
 
         this.#css_api.importCssToRoot(
             document,
@@ -118,10 +117,10 @@ export class PwaApi {
     }
 
     /**
-     * @returns {PwaService}
+     * @returns {Promise<PwaService>}
      */
-    #getPwaService() {
-        return PwaService.new(
+    async #getPwaService() {
+        return (await import("../../Service/Pwa/Port/PwaService.mjs")).PwaService.new(
             this.#json_api,
             this.#manifest_json_file,
             this.#get_background_color,
