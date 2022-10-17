@@ -1,5 +1,3 @@
-import { InitPwaCommand } from "../Command/InitPwaCommand.mjs";
-
 /** @typedef {import("../../../Adapter/Pwa/getBackgroundColor.mjs").getBackgroundColor} getBackgroundColor */
 /** @typedef {import("../../../Adapter/Pwa/getDirection.mjs").getDirection} getDirection */
 /** @typedef {import("../../../Adapter/Pwa/getLanguage.mjs").getLanguage} getLanguage */
@@ -83,7 +81,7 @@ export class PwaService {
      * @returns {Promise<void>}
      */
     async initPwa() {
-        await InitPwaCommand.new(
+        await (await import("../Command/InitPwaCommand.mjs")).InitPwaCommand.new(
             this.#json_api,
             this.#manifest_json_file,
             this.#get_background_color,
