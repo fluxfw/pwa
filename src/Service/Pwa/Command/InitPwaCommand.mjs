@@ -102,38 +102,43 @@ export class InitPwaCommand {
             this.#manifest_json_file
         ));
 
-        manifest.lang ??= "";
         if (this.#get_language !== null) {
             manifest.lang = this.#get_language();
+        } else {
+            manifest.lang ??= "";
         }
         document.documentElement.lang = manifest.lang;
 
-        manifest.dir ??= "";
         if (this.#get_direction !== null) {
             manifest.dir = this.#get_direction();
+        } else {
+            manifest.dir ??= "";
         }
         document.documentElement.dir = manifest.dir;
 
-        manifest.description ??= "";
         if (this.#get_translated_text !== null) {
             manifest.description = this.#get_translated_text(
                 manifest.description
             );
+        } else {
+            manifest.description ??= "";
         }
 
-        manifest.name ??= "";
         if (this.#get_translated_text !== null) {
             manifest.name = this.#get_translated_text(
                 manifest.name
             );
+        } else {
+            manifest.name ??= "";
         }
         document.title = manifest.name;
 
-        manifest.short_name ??= "";
         if (this.#get_translated_text !== null) {
             manifest.short_name = this.#get_translated_text(
                 manifest.short_name
             );
+        } else {
+            manifest.short_name ??= "";
         }
 
         manifest.start_url = this.#fixUrl(
