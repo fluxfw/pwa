@@ -1,3 +1,3 @@
 /**
- * @typedef {() => string} getLanguage
+ * @typedef {() => Promise<string>} getLanguage
  */

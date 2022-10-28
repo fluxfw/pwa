@@ -97,8 +97,6 @@ export class PwaApi {
      * @returns {Promise<void>}
      */
     async init() {
-        this.#pwa_service ??= await this.#getPwaService();
-
         this.#css_api.importCssToRoot(
             document,
             `${__dirname}/../Pwa/PwaVariables.css`
@@ -113,14 +111,14 @@ export class PwaApi {
      * @returns {Promise<void>}
      */
     async initPwa() {
-        await this.#pwa_service.initPwa();
+        await (await this.#getPwaService()).initPwa();
     }
 
     /**
      * @returns {Promise<PwaService>}
      */
     async #getPwaService() {
-        return (await import("../../Service/Pwa/Port/PwaService.mjs")).PwaService.new(
+        this.#pwa_service ??= (await import("../../Service/Pwa/Port/PwaService.mjs")).PwaService.new(
             this.#json_api,
             this.#manifest_json_file,
             this.#get_background_color,
@@ -129,5 +127,7 @@ export class PwaApi {
             this.#get_theme_color,
             this.#get_translated_text
         );
+
+        return this.#pwa_service;
     }
 }

@@ -1,3 +1,3 @@
 /**
- * @typedef {() => string} getBackgroundColor
+ * @typedef {() => Promise<string>} getBackgroundColor
  */

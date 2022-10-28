@@ -103,21 +103,21 @@ export class InitPwaCommand {
         ));
 
         if (this.#get_language !== null) {
-            manifest.lang = this.#get_language();
+            manifest.lang = await this.#get_language();
         } else {
             manifest.lang ??= "";
         }
         document.documentElement.lang = manifest.lang;
 
         if (this.#get_direction !== null) {
-            manifest.dir = this.#get_direction();
+            manifest.dir = await this.#get_direction();
         } else {
             manifest.dir ??= "";
         }
         document.documentElement.dir = manifest.dir;
 
         if (this.#get_translated_text !== null) {
-            manifest.description = this.#get_translated_text(
+            manifest.description = await this.#get_translated_text(
                 manifest.description
             );
         } else {
@@ -125,7 +125,7 @@ export class InitPwaCommand {
         }
 
         if (this.#get_translated_text !== null) {
-            manifest.name = this.#get_translated_text(
+            manifest.name = await this.#get_translated_text(
                 manifest.name
             );
         } else {
@@ -134,7 +134,7 @@ export class InitPwaCommand {
         document.title = manifest.name;
 
         if (this.#get_translated_text !== null) {
-            manifest.short_name = this.#get_translated_text(
+            manifest.short_name = await this.#get_translated_text(
                 manifest.short_name
             );
         } else {
@@ -186,12 +186,12 @@ export class InitPwaCommand {
 
         manifest.background_color ??= "";
         if (this.#get_background_color !== null) {
-            manifest.background_color = this.#get_background_color();
+            manifest.background_color = await this.#get_background_color();
         }
 
         manifest.theme_color ??= "";
         if (this.#get_theme_color !== null) {
-            manifest.theme_color = this.#get_theme_color();
+            manifest.theme_color = await this.#get_theme_color();
         }
 
         const manifest_link = document.head.querySelector("link[rel=manifest]") ?? document.createElement("link");

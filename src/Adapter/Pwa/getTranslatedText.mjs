@@ -1,3 +1,3 @@
 /**
- * @typedef {(text: string) => string} getTranslatedText
+ * @typedef {(text: string) => Promise<string>} getTranslatedText
  */
