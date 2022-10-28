@@ -1,3 +1,3 @@
 /**
- * @typedef {() => string} getDirection
+ * @typedef {() => Promise<string>} getDirection
  */
