@@ -1,10 +1,6 @@
 /** @typedef {import("../../../../flux-css-api/src/Adapter/Api/CssApi.mjs").CssApi} CssApi */
-/** @typedef {import("../Pwa/getBackgroundColor.mjs").getBackgroundColor} getBackgroundColor */
-/** @typedef {import("../Pwa/getDirection.mjs").getDirection} getDirection */
-/** @typedef {import("../Pwa/getLanguage.mjs").getLanguage} getLanguage */
-/** @typedef {import("../Pwa/getThemeColor.mjs").getThemeColor} getThemeColor */
-/** @typedef {import("../Pwa/getTranslatedText.mjs").getTranslatedText} getTranslatedText */
 /** @typedef {import("../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").JsonApi} JsonApi */
+/** @typedef {import("../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").JsonApi} LocalizationApi */
 /** @typedef {import("../../Service/Pwa/Port/PwaService.mjs").PwaService} PwaService */
 
 const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
@@ -15,33 +11,13 @@ export class PwaApi {
      */
     #css_api;
     /**
-     * @type {getBackgroundColor | null}
-     */
-    #get_background_color;
-    /**
-     * @type {getDirection | null}
-     */
-    #get_direction;
-    /**
-     * @type {getLanguage | null}
-     */
-    #get_language;
-    /**
-     * @type {getThemeColor | null}
-     */
-    #get_theme_color;
-    /**
-     * @type {getTranslatedText | null}
-     */
-    #get_translated_text;
-    /**
      * @type {JsonApi}
      */
     #json_api;
     /**
-     * @type {string}
+     * @type {LocalizationApi}
      */
-    #manifest_json_file;
+    #localization_api;
     /**
      * @type {PwaService | null}
      */
@@ -50,68 +26,51 @@ export class PwaApi {
     /**
      * @param {CssApi} css_api
      * @param {JsonApi} json_api
-     * @param {string} manifest_json_file
-     * @param {getBackgroundColor | null} get_background_color
-     * @param {getDirection | null} get_direction
-     * @param {getLanguage | null} get_language
-     * @param {getThemeColor | null} get_theme_color
-     * @param {getTranslatedText | null} get_translated_text
+     * @param {LocalizationApi} localization_api
      * @returns {PwaApi}
      */
-    static new(css_api, json_api, manifest_json_file, get_background_color = null, get_direction = null, get_language = null, get_theme_color = null, get_translated_text = null) {
+    static new(css_api, json_api, localization_api) {
         return new this(
             css_api,
             json_api,
-            manifest_json_file,
-            get_background_color,
-            get_direction,
-            get_language,
-            get_theme_color,
-            get_translated_text
+            localization_api
         );
     }
 
     /**
      * @param {CssApi} css_api
      * @param {JsonApi} json_api
-     * @param {string} manifest_json_file
-     * @param {getBackgroundColor | null} get_background_color
-     * @param {getDirection | null} get_direction
-     * @param {getLanguage | null} get_language
-     * @param {getThemeColor | null} get_theme_color
-     * @param {getTranslatedText | null} get_translated_text
+     * @param {LocalizationApi} localization_api
      * @private
      */
-    constructor(css_api, json_api, manifest_json_file, get_background_color, get_direction, get_language, get_theme_color, get_translated_text) {
+    constructor(css_api, json_api, localization_api) {
         this.#css_api = css_api;
         this.#json_api = json_api;
-        this.#manifest_json_file = manifest_json_file;
-        this.#get_background_color = get_background_color;
-        this.#get_direction = get_direction;
-        this.#get_language = get_language;
-        this.#get_theme_color = get_theme_color;
-        this.#get_translated_text = get_translated_text;
+        this.#localization_api = localization_api;
     }
 
     /**
      * @returns {Promise<void>}
      */
     async init() {
+        addEventListener("touchstart", () => {
+
+        });
+
         this.#css_api.importCssToRoot(
             document,
             `${__dirname}/../Pwa/PwaVariables.css`
         );
-
-        addEventListener("touchstart", () => {
-
-        });
     }
 
     /**
+     * @param {string} manifest_json_file
      * @returns {Promise<void>}
      */
-    async initPwa() {
-        await (await this.#getPwaService()).initPwa();
+    async initPwa(manifest_json_file) {
+        await (await this.#getPwaService()).initPwa(
+            manifest_json_file
+        );
     }
 
     /**
@@ -120,12 +79,7 @@ export class PwaApi {
     async #getPwaService() {
         this.#pwa_service ??= (await import("../../Service/Pwa/Port/PwaService.mjs")).PwaService.new(
             this.#json_api,
-            this.#manifest_json_file,
-            this.#get_background_color,
-            this.#get_direction,
-            this.#get_language,
-            this.#get_theme_color,
-            this.#get_translated_text
+            this.#localization_api
         );
 
         return this.#pwa_service;

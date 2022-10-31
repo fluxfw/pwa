@@ -1,14 +1,14 @@
 {
     "name": "flux-pwa-api",
     "productName": "flux-pwa-api",
-    "version": "2022-10-28-1",
+    "version": "2022-10-31-1",
     "description": "",
     "keywords": [],
     "homepage": "",
     "peerDependencies": {
         "flux-css-api": "*",
-        "flux-fetch-api": "*",
-        "flux-json-api": "*"
+        "flux-json-api": "*",
+        "flux-localization-api": "*"
     },
     "private": true
 }
