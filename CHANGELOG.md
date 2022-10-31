@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2022-10-31-1
+
+Changes:
+
+- Separate `flux-pwa-generator-api`
+
 ## v2022-10-28-1
 
 Changes:

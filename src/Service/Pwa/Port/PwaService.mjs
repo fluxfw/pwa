@@ -1,95 +1,49 @@
-/** @typedef {import("../../../Adapter/Pwa/getBackgroundColor.mjs").getBackgroundColor} getBackgroundColor */
-/** @typedef {import("../../../Adapter/Pwa/getDirection.mjs").getDirection} getDirection */
-/** @typedef {import("../../../Adapter/Pwa/getLanguage.mjs").getLanguage} getLanguage */
-/** @typedef {import("../../../Adapter/Pwa/getThemeColor.mjs").getThemeColor} getThemeColor */
-/** @typedef {import("../../../Adapter/Pwa/getTranslatedText.mjs").getTranslatedText} getTranslatedText */
 /** @typedef {import("../../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").JsonApi} JsonApi */
+/** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").JsonApi} LocalizationApi */
 
 export class PwaService {
-    /**
-     * @type {getBackgroundColor | null}
-     */
-    #get_background_color;
-    /**
-     * @type {getDirection | null}
-     */
-    #get_direction;
-    /**
-     * @type {getLanguage | null}
-     */
-    #get_language;
-    /**
-     * @type {getThemeColor | null}
-     */
-    #get_theme_color;
-    /**
-     * @type {getTranslatedText | null}
-     */
-    #get_translated_text;
     /**
      * @type {JsonApi}
      */
     #json_api;
     /**
-     * @type {string}
+     * @type {LocalizationApi}
      */
-    #manifest_json_file;
+    #localization_api;
 
     /**
      * @param {JsonApi} json_api
-     * @param {string} manifest_json_file
-     * @param {getBackgroundColor | null} get_background_color
-     * @param {getDirection | null} get_direction
-     * @param {getLanguage | null} get_language
-     * @param {getThemeColor | null} get_theme_color
-     * @param {getTranslatedText | null} get_translated_text
+     * @param {LocalizationApi} localization_api
      * @returns {PwaService}
      */
-    static new(json_api, manifest_json_file, get_background_color = null, get_direction = null, get_language = null, get_theme_color = null, get_translated_text = null) {
+    static new(json_api, localization_api) {
         return new this(
             json_api,
-            manifest_json_file,
-            get_background_color,
-            get_direction,
-            get_language,
-            get_theme_color,
-            get_translated_text
+            localization_api
         );
     }
 
     /**
      * @param {JsonApi} json_api
-     * @param {string} manifest_json_file
-     * @param {getBackgroundColor | null} get_background_color
-     * @param {getDirection | null} get_direction
-     * @param {getLanguage | null} get_language
-     * @param {getThemeColor | null} get_theme_color
-     * @param {getTranslatedText | null} get_translated_text
+     * @param {LocalizationApi} localization_api
      * @private
      */
-    constructor(json_api, manifest_json_file, get_background_color, get_direction, get_language, get_theme_color, get_translated_text) {
+    constructor(json_api, localization_api) {
         this.#json_api = json_api;
-        this.#manifest_json_file = manifest_json_file;
-        this.#get_background_color = get_background_color;
-        this.#get_direction = get_direction;
-        this.#get_language = get_language;
-        this.#get_theme_color = get_theme_color;
-        this.#get_translated_text = get_translated_text;
+        this.#localization_api = localization_api;
     }
 
     /**
+     * @param {string} manifest_json_file
      * @returns {Promise<void>}
      */
-    async initPwa() {
+    async initPwa(manifest_json_file) {
         await (await import("../Command/InitPwaCommand.mjs")).InitPwaCommand.new(
             this.#json_api,
-            this.#manifest_json_file,
-            this.#get_background_color,
-            this.#get_direction,
-            this.#get_language,
-            this.#get_theme_color,
-            this.#get_translated_text
+            this.#localization_api
         )
-            .initPwa();
+            .initPwa(
+                manifest_json_file
+            );
     }
 }
