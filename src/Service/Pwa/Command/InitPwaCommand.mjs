@@ -40,9 +40,22 @@ export class InitPwaCommand {
     async initPwa(manifest_json_file) {
         const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file.lastIndexOf("."))}-${this.#localization_api.getLanguage()}.json`;
 
-        const manifest = await this.#json_api.importJson(
-            localized_manifest_json_file
-        );
+        let manifest, _manifest_json_file;
+        try {
+            manifest = await this.#json_api.importJson(
+                localized_manifest_json_file
+            );
+
+            _manifest_json_file = localized_manifest_json_file;
+        } catch (error) {
+            console.error(`Load ${manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
+
+            manifest = await this.#json_api.importJson(
+                manifest_json_file
+            );
+
+            _manifest_json_file = manifest_json_file;
+        }
 
         document.documentElement.dir = manifest.dir ?? "";
         document.documentElement.lang = manifest.lang ?? "";
@@ -57,7 +70,7 @@ export class InitPwaCommand {
         }
 
         const manifest_link = document.head.querySelector("link[rel=manifest]") ?? document.createElement("link");
-        manifest_link.href = localized_manifest_json_file;
+        manifest_link.href = _manifest_json_file;
         manifest_link.rel = "manifest";
         if (!manifest_link.isConnected) {
             document.head.appendChild(manifest_link);
