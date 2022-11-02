@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2022-11-02-1
+
+Changes:
+
+- Load `manifest.json` as fallback if missing localized `manifest.json`
+
 ## v2022-10-31-1
 
 Changes:
