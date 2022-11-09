@@ -1,5 +1,5 @@
 /** @typedef {import("../../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").LocalizationApi} JsonApi */
-/** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").JsonApi} LocalizationApi */
+/** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
 
 export class InitPwaCommand {
     /**
@@ -38,7 +38,7 @@ export class InitPwaCommand {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file) {
-        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file.lastIndexOf("."))}-${await this.#localization_api.getLanguage()}.json`;
+        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file.lastIndexOf("."))}-${(await this.#localization_api.getLanguage()).language}.json`;
 
         let manifest, _manifest_json_file;
         try {
