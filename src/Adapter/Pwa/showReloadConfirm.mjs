@@ -1,0 +1,3 @@
+/**
+ * @typedef {() => Promise<boolean>} showReloadConfirm
+ */

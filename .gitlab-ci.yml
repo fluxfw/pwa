@@ -10,6 +10,7 @@ lint:
     only:
         - branches
         - tags
+    allow_failure: true
 
 publish-utils:
     stage: publish-utils
