@@ -1,0 +1,73 @@
+:host {
+    background-color: var(--reload-confirm-background-color);
+    bottom: 0;
+    color: var(--reload-confirm-foreground-color);
+    left: 0;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    z-index: 1000;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    text-align: center;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    gap: 5px;
+    margin-left: 10px;
+    width: 200px;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--reload-confirm-button-background-color);
+    border: none;
+    border-radius: 0;
+    color: var(--reload-confirm-button-foreground-color);
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+button:not(:disabled):hover,
+button:not(:disabled):active {
+    background-color: var(--reload-confirm-active-button-background-color);
+    color: var(--reload-confirm-active-button-foreground-color);
+}
+
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .buttons {
+        margin-left: 0;
+    }
+}

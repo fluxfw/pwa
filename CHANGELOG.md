@@ -6,6 +6,13 @@ Changes:
 
 \-
 
+## v2022-12-05-1
+
+Changes:
+
+- `initServiceWorker`
+- `showReloadConfirm`
+
 ## v2022-11-09-1
 
 Changes:
