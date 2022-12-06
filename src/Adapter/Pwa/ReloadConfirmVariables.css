@@ -1,8 +1,0 @@
-:root {
-    --reload-confirm-active-button-background-color: var(--color-scheme-foreground, #000000);
-    --reload-confirm-active-button-foreground-color: var(--color-scheme-background, #ffffff);
-    --reload-confirm-background-color: var(--color-scheme-accent, #000000);
-    --reload-confirm-button-background-color: var(--color-scheme-background, #ffffff);
-    --reload-confirm-button-foreground-color: var(--color-scheme-foreground, #000000);
-    --reload-confirm-foreground-color: var(--color-scheme-accent-foreground, #ffffff);
-}

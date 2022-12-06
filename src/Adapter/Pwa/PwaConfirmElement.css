@@ -1,30 +1,33 @@
 :host {
-    background-color: var(--reload-confirm-background-color);
+    background-color: rgba(0, 0, 0, 0.2);
     bottom: 0;
-    color: var(--reload-confirm-foreground-color);
     left: 0;
-    padding: 10px;
     position: fixed;
     right: 0;
-    z-index: 1000;
+    top: 0;
+    z-index: 2000;
 }
 
 .container {
     align-items: center;
+    background-color: var(--pwa-confirm-background-color);
+    bottom: 0;
+    color: var(--pwa-confirm-foreground-color);
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    right: 0;
 }
 
-.content {
+.info {
     flex-grow: 1;
     flex-shrink: 1;
-    text-align: center;
-}
-
-.title {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
+    text-align: center;
 }
 
 .buttons {
@@ -32,17 +35,17 @@
     flex-direction: column;
     flex-grow: 0;
     flex-shrink: 0;
-    gap: 5px;
+    gap: 10px;
     margin-left: 10px;
-    width: 200px;
+    width: 300px;
 }
 
 button {
     -webkit-tap-highlight-color: transparent;
-    background-color: var(--reload-confirm-button-background-color);
+    background-color: var(--pwa-confirm-button-background-color);
     border: none;
     border-radius: 0;
-    color: var(--reload-confirm-button-foreground-color);
+    color: var(--pwa-confirm-button-foreground-color);
     font-size: 16px;
     height: 30px;
     line-height: 30px;
@@ -56,18 +59,30 @@ button:not(:disabled) {
     cursor: pointer;
 }
 
-button:not(:disabled):hover,
-button:not(:disabled):active {
-    background-color: var(--reload-confirm-active-button-background-color);
-    color: var(--reload-confirm-active-button-foreground-color);
+button:disabled {
+    opacity: 0.6;
 }
 
-@media (max-width: 600px) {
+button:not(:disabled):hover,
+button:not(:disabled):active {
+    background-color: var(--pwa-confirm-active-button-background-color);
+    color: var(--pwa-confirm-active-button-foreground-color);
+}
+
+@media (max-width: 1000px) {
     .container {
         flex-direction: column;
     }
 
     .buttons {
         margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+
+@media print {
+    :host {
+        display: none;
     }
 }
