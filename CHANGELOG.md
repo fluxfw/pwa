@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2022-12-06-1
+
+Changes:
+
+- `showInstallConfirm`
+
 ## v2022-12-05-1
 
 Changes:

@@ -1,7 +1,8 @@
 {
-    "A new version of the PWA is available": "Eine neue Version der PWA ist verfügbar",
-    "Force reload": "Neuladen erzwingen",
-    "It can be forced to reload this instance, but any unsaved changes may will be lost and other instances may have data inconsistency!": "Neuladen dieser Instanz kann erzwungen werden, aber nicht gespeicherte Änderungen gehen möglicherweise verloren und andere Instanzen haben ev. Daten-Inkonsistenz!",
-    "It can be used, if all instances of the PWA are closed": "Diese kann benutzt werden, sobald alle Instanzen der PWA geschlossen sind",
-    "Later": "Später"
+    "{name} can be installed as PWA": "{name} kann als PWA installiert werden",
+    "A new version of {name} is available": "Eine neue Version von {name} ist verfügbar",
+    "Install": "Installieren",
+    "Later": "Später",
+    "Update": "Aktualisieren",
+    "Use in browser": "Im Browser benutzen"
 }
