@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2022-12-12-2
+
+Changes:
+
+- Use dynamic file extension
+
 ## v2022-12-12-1
 
 Changes:
