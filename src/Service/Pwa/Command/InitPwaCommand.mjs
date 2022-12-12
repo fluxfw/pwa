@@ -38,7 +38,8 @@ export class InitPwaCommand {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file) {
-        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file.lastIndexOf("."))}-${(await this.#localization_api.getLanguage()).language}.json`;
+        const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
+        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
 
         let manifest, _manifest_json_file;
         try {
