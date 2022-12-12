@@ -1,10 +1,16 @@
 import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../../../Adapter/Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
+import { SKIP_WAITING } from "../../../Adapter/Pwa/SKIP_WAITING.mjs";
 
+/** @typedef {import("../../../Adapter/Pwa/hideConfirm.mjs").hideConfirm} hideConfirm */
 /** @typedef {import("../../../../../flux-settings-api/src/Adapter/Api/SettingsApi.mjs").SettingsApi} SettingsApi */
 /** @typedef {import("../../../Adapter/Pwa/showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("../../../Adapter/Pwa/showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorkerCommand {
+    /**
+     * @type {hideConfirm | null}
+     */
+    #hide_confirm = null;
     /**
      * @type {boolean}
      */
@@ -91,8 +97,6 @@ export class InitServiceWorkerCommand {
             return;
         }
 
-        let _hide_confirm = null;
-
         addEventListener("beforeinstallprompt", async e => {
             e.preventDefault();
 
@@ -102,14 +106,14 @@ export class InitServiceWorkerCommand {
 
             const install = await show_install_confirm(
                 hide_confirm => {
-                    _hide_confirm = () => {
-                        _hide_confirm = null;
+                    this.#hide_confirm = () => {
+                        this.#hide_confirm = null;
                         hide_confirm();
                     };
                 }
             );
 
-            _hide_confirm = null;
+            this.#hide_confirm = null;
 
             await this.#setInstallConfirmShown();
 
@@ -136,8 +140,8 @@ export class InitServiceWorkerCommand {
         pwa_installed_detector.addEventListener("change", async () => {
             await this.#setInstallConfirmShown();
 
-            if (_hide_confirm !== null) {
-                _hide_confirm();
+            if (this.#hide_confirm !== null) {
+                this.#hide_confirm();
             }
         }, {
             once: true
@@ -213,6 +217,6 @@ export class InitServiceWorkerCommand {
             return;
         }
 
-        registration.waiting.postMessage("skipWaiting");
+        registration.waiting.postMessage(SKIP_WAITING);
     }
 }
