@@ -1,3 +1,5 @@
+/** @typedef {import("./hideConfirm.mjs").hideConfirm} hideConfirm */
+
 /**
- * @typedef {(hide_confirm: () => void) => void} setHideConfirm
+ * @typedef {(hide_confirm: hideConfirm) => void} setHideConfirm
  */
