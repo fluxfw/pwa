@@ -49,7 +49,7 @@ export class InitPwaCommand {
 
             _manifest_json_file = localized_manifest_json_file;
         } catch (error) {
-            console.error(`Load ${manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
+            console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
 
             manifest = await this.#json_api.importJson(
                 manifest_json_file
