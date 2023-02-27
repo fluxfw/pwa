@@ -1,8 +1,8 @@
 {
     "{name} can be installed as PWA": "{name} kann als PWA installiert werden",
-    "A new version of {name} is available": "Eine neue Version von {name} ist verfügbar",
+    "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may take up to a minute": "Eine neue Version von {name} ist verfügbar\nDas Update wird automatisch installiert, sobald alle Instanzen geschlossen sind\nDas Update kann versucht erzwungen zu werden, aber das dauert möglicherweise bis zu einer Minute",
+    "Force update": "Aktualisieren erzwingen",
     "Install": "Installieren",
     "Later": "Später",
-    "Update": "Aktualisieren",
     "Use in browser": "Im Browser benutzen"
 }

@@ -38,8 +38,8 @@ export class ShowUpdateConfirmCommand {
      */
     async showUpdateConfirm() {
         const reload = await this.#pwa_service.showPwaConfirm(
-            "A new version of {name} is available",
-            "Update",
+            "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may take up to a minute",
+            "Force update",
             "Later"
         );
 
