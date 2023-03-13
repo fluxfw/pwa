@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-03-13-1
+
+Changes:
+
+- Message service worker event data object
+
 ## v2023-02-27-1
 
 Changes:
