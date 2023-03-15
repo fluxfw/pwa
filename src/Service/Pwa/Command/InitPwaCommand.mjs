@@ -1,35 +1,39 @@
-/** @typedef {import("../../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").LocalizationApi} JsonApi */
+import { CONTENT_TYPE_JSON } from "../../../../../flux-http-api/src/Adapter/ContentType/CONTENT_TYPE.mjs";
+import { HEADER_ACCEPT } from "../../../../../flux-http-api/src/Adapter/Header/HEADER.mjs";
+import { HttpClientRequest } from "../../../../../flux-http-api/src/Adapter/Client/HttpClientRequest.mjs";
+
+/** @typedef {import("../../../../../flux-http-api/src/Adapter/Api/HttpApi.mjs").HttpApi} HttpApi */
 /** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
 
 export class InitPwaCommand {
     /**
-     * @type {JsonApi}
+     * @type {HttpApi}
      */
-    #json_api;
+    #http_api;
     /**
      * @type {LocalizationApi}
      */
     #localization_api;
 
     /**
-     * @param {JsonApi} json_api
+     * @param {HttpApi} http_api
      * @param {LocalizationApi} localization_api
      * @returns {InitPwaCommand}
      */
-    static new(json_api, localization_api) {
+    static new(http_api, localization_api) {
         return new this(
-            json_api,
+            http_api,
             localization_api
         );
     }
 
     /**
-     * @param {JsonApi} json_api
+     * @param {HttpApi} http_api
      * @param {LocalizationApi} localization_api
      * @private
      */
-    constructor(json_api, localization_api) {
-        this.#json_api = json_api;
+    constructor(http_api, localization_api) {
+        this.#http_api = http_api;
         this.#localization_api = localization_api;
     }
 
@@ -43,17 +47,33 @@ export class InitPwaCommand {
 
         let manifest, _manifest_json_file;
         try {
-            manifest = await this.#json_api.importJson(
-                localized_manifest_json_file
-            );
+            manifest = await (await this.#http_api.request(
+                HttpClientRequest.new(
+                    new URL(localized_manifest_json_file),
+                    null,
+                    null,
+                    {
+                        [HEADER_ACCEPT]: CONTENT_TYPE_JSON
+                    },
+                    true
+                )
+            )).body.json();
 
             _manifest_json_file = localized_manifest_json_file;
         } catch (error) {
             console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
 
-            manifest = await this.#json_api.importJson(
-                manifest_json_file
-            );
+            manifest = await (await this.#http_api.request(
+                HttpClientRequest.new(
+                    new URL(manifest_json_file),
+                    null,
+                    null,
+                    {
+                        [HEADER_ACCEPT]: CONTENT_TYPE_JSON
+                    },
+                    true
+                )
+            )).body.json();
 
             _manifest_json_file = manifest_json_file;
         }

@@ -1,5 +1,5 @@
 /** @typedef {import("../../../../../flux-css-api/src/Adapter/Api/CssApi.mjs").CssApi} CssApi */
-/** @typedef {import("../../../../../flux-json-api/src/Adapter/Api/JsonApi.mjs").JsonApi} JsonApi */
+/** @typedef {import("../../../../../flux-http-api/src/Adapter/Api/HttpApi.mjs").HttpApi} HttpApi */
 /** @typedef {import("../../../../../flux-loading-api/src/Adapter/Api/LoadingApi.mjs").LoadingApi} LoadingApi */
 /** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
 /** @typedef {import("../../../Adapter/Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
@@ -13,9 +13,9 @@ export class PwaService {
      */
     #css_api;
     /**
-     * @type {JsonApi | null}
+     * @type {HttpApi | null}
      */
-    #json_api;
+    #http_api;
     /**
      * @type {LoadingApi | null}
      */
@@ -31,16 +31,16 @@ export class PwaService {
 
     /**
      * @param {CssApi | null} css_api
-     * @param {JsonApi | null} json_api
+     * @param {HttpApi | null} http_api
      * @param {LoadingApi | null} loading_api
      * @param {LocalizationApi | null} localization_api
      * @param {SettingsApi | null} settings_api
      * @returns {PwaService}
      */
-    static new(css_api = null, json_api = null, loading_api = null, localization_api = null, settings_api = null) {
+    static new(css_api = null, http_api = null, loading_api = null, localization_api = null, settings_api = null) {
         return new this(
             css_api,
-            json_api,
+            http_api,
             loading_api,
             localization_api,
             settings_api
@@ -49,15 +49,15 @@ export class PwaService {
 
     /**
      * @param {CssApi | null} css_api
-     * @param {JsonApi | null} json_api
+     * @param {HttpApi | null} http_api
      * @param {LoadingApi | null} loading_api
      * @param {LocalizationApi | null} localization_api
      * @param {SettingsApi | null} settings_api
      * @private
      */
-    constructor(css_api, json_api, loading_api, localization_api, settings_api) {
+    constructor(css_api, http_api, loading_api, localization_api, settings_api) {
         this.#css_api = css_api;
-        this.#json_api = json_api;
+        this.#http_api = http_api;
         this.#loading_api = loading_api;
         this.#localization_api = localization_api;
         this.#settings_api = settings_api;
@@ -68,15 +68,15 @@ export class PwaService {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file) {
-        if (this.#json_api === null) {
-            throw new Error("Missing JsonApi");
+        if (this.#http_api === null) {
+            throw new Error("Missing HttpApi");
         }
         if (this.#localization_api === null) {
             throw new Error("Missing LocalizationApi");
         }
 
         await (await import("../Command/InitPwaCommand.mjs")).InitPwaCommand.new(
-            this.#json_api,
+            this.#http_api,
             this.#localization_api
         )
             .initPwa(
