@@ -1,7 +1,7 @@
 import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("../../../../flux-css-api/src/Adapter/Api/CssApi.mjs").CssApi} CssApi */
-/** @typedef {import("../../../../flux-http-api/src/Adapter/Api/HttpApi.mjs").HttpApi} HttpApi */
+/** @typedef {import("../../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("../../../../flux-loading-api/src/Adapter/Api/LoadingApi.mjs").LoadingApi} LoadingApi */
 /** @typedef {import("../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
 /** @typedef {import("../../Service/Pwa/Port/PwaService.mjs").PwaService} PwaService */
@@ -18,9 +18,9 @@ export class PwaApi {
      */
     #css_api;
     /**
-     * @type {HttpApi | null}
+     * @type {FluxHttpApi | null}
      */
-    #http_api;
+    #flux_http_api;
     /**
      * @type {LoadingApi | null}
      */
@@ -40,16 +40,16 @@ export class PwaApi {
 
     /**
      * @param {CssApi | null} css_api
-     * @param {HttpApi | null} http_api
+     * @param {FluxHttpApi | null} flux_http_api
      * @param {LoadingApi | null} loading_api
      * @param {LocalizationApi | null} localization_api
      * @param {SettingsApi | null} settings_api
      * @returns {PwaApi}
      */
-    static new(css_api = null, http_api = null, loading_api = null, localization_api = null, settings_api = null) {
+    static new(css_api = null, flux_http_api = null, loading_api = null, localization_api = null, settings_api = null) {
         return new this(
             css_api,
-            http_api,
+            flux_http_api,
             loading_api,
             localization_api,
             settings_api
@@ -58,15 +58,15 @@ export class PwaApi {
 
     /**
      * @param {CssApi | null} css_api
-     * @param {HttpApi | null} http_api
+     * @param {FluxHttpApi | null} flux_http_api
      * @param {LoadingApi | null} loading_api
      * @param {LocalizationApi | null} localization_api
      * @param {SettingsApi | null} settings_api
      * @private
      */
-    constructor(css_api, http_api, loading_api, localization_api, settings_api) {
+    constructor(css_api, flux_http_api, loading_api, localization_api, settings_api) {
         this.#css_api = css_api;
-        this.#http_api = http_api;
+        this.#flux_http_api = flux_http_api;
         this.#loading_api = loading_api;
         this.#localization_api = localization_api;
         this.#settings_api = settings_api;
@@ -146,7 +146,7 @@ export class PwaApi {
     async #getPwaService() {
         this.#pwa_service ??= (await import("../../Service/Pwa/Port/PwaService.mjs")).PwaService.new(
             this.#css_api,
-            this.#http_api,
+            this.#flux_http_api,
             this.#loading_api,
             this.#localization_api,
             this.#settings_api

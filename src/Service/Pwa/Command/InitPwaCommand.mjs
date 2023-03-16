@@ -1,39 +1,39 @@
-import { CONTENT_TYPE_JSON } from "../../../../../flux-http-api/src/Adapter/ContentType/CONTENT_TYPE.mjs";
-import { HEADER_ACCEPT } from "../../../../../flux-http-api/src/Adapter/Header/HEADER.mjs";
-import { HttpClientRequest } from "../../../../../flux-http-api/src/Adapter/Client/HttpClientRequest.mjs";
+import { CONTENT_TYPE_JSON } from "../../../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
+import { HEADER_ACCEPT } from "../../../../../flux-http-api/src/Header/HEADER.mjs";
+import { HttpClientRequest } from "../../../../../flux-http-api/src/Client/HttpClientRequest.mjs";
 
-/** @typedef {import("../../../../../flux-http-api/src/Adapter/Api/HttpApi.mjs").HttpApi} HttpApi */
+/** @typedef {import("../../../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
 
 export class InitPwaCommand {
     /**
-     * @type {HttpApi}
+     * @type {FluxHttpApi}
      */
-    #http_api;
+    #flux_http_api;
     /**
      * @type {LocalizationApi}
      */
     #localization_api;
 
     /**
-     * @param {HttpApi} http_api
+     * @param {FluxHttpApi} flux_http_api
      * @param {LocalizationApi} localization_api
      * @returns {InitPwaCommand}
      */
-    static new(http_api, localization_api) {
+    static new(flux_http_api, localization_api) {
         return new this(
-            http_api,
+            flux_http_api,
             localization_api
         );
     }
 
     /**
-     * @param {HttpApi} http_api
+     * @param {FluxHttpApi} flux_http_api
      * @param {LocalizationApi} localization_api
      * @private
      */
-    constructor(http_api, localization_api) {
-        this.#http_api = http_api;
+    constructor(flux_http_api, localization_api) {
+        this.#flux_http_api = flux_http_api;
         this.#localization_api = localization_api;
     }
 
@@ -47,7 +47,7 @@ export class InitPwaCommand {
 
         let manifest, _manifest_json_file;
         try {
-            manifest = await (await this.#http_api.request(
+            manifest = await (await this.#flux_http_api.request(
                 HttpClientRequest.new(
                     new URL(localized_manifest_json_file),
                     null,
@@ -63,7 +63,7 @@ export class InitPwaCommand {
         } catch (error) {
             console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
 
-            manifest = await (await this.#http_api.request(
+            manifest = await (await this.#flux_http_api.request(
                 HttpClientRequest.new(
                     new URL(manifest_json_file),
                     null,
