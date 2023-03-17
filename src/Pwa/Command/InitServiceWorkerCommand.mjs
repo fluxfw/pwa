@@ -1,12 +1,16 @@
-import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../../../Adapter/Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
-import { SKIP_WAITING } from "../../../Adapter/Pwa/SKIP_WAITING.mjs";
+import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../../Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
+import { SKIP_WAITING } from "../SKIP_WAITING.mjs";
 
-/** @typedef {import("../../../Adapter/Pwa/hideConfirm.mjs").hideConfirm} hideConfirm */
-/** @typedef {import("../../../../../flux-settings-api/src/Adapter/Api/SettingsApi.mjs").SettingsApi} SettingsApi */
-/** @typedef {import("../../../Adapter/Pwa/showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
-/** @typedef {import("../../../Adapter/Pwa/showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
+/** @typedef {import("../../../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
+/** @typedef {import("../hideConfirm.mjs").hideConfirm} hideConfirm */
+/** @typedef {import("../showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
+/** @typedef {import("../showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorkerCommand {
+    /**
+     * @type {FluxSettingsApi}
+     */
+    #flux_settings_api;
     /**
      * @type {hideConfirm | null}
      */
@@ -15,27 +19,23 @@ export class InitServiceWorkerCommand {
      * @type {boolean}
      */
     #reload;
-    /**
-     * @type {SettingsApi}
-     */
-    #settings_api;
 
     /**
-     * @param {SettingsApi} settings_api
+     * @param {FluxSettingsApi} flux_settings_api
      * @returns {InitServiceWorkerCommand}
      */
-    static new(settings_api) {
+    static new(flux_settings_api) {
         return new this(
-            settings_api
+            flux_settings_api
         );
     }
 
     /**
-     * @param {SettingsApi} settings_api
+     * @param {FluxSettingsApi} flux_settings_api
      * @private
      */
-    constructor(settings_api) {
-        this.#settings_api = settings_api;
+    constructor(flux_settings_api) {
+        this.#flux_settings_api = flux_settings_api;
         this.#reload = false;
     }
 
@@ -82,7 +82,7 @@ export class InitServiceWorkerCommand {
      * @returns {Promise<boolean>}
      */
     async #isInstallConfirmShown() {
-        return this.#settings_api.get(
+        return this.#flux_settings_api.get(
             INSTALL_CONFIRM_SHOWN_SETTINGS_KEY,
             false
         );
@@ -195,7 +195,7 @@ export class InitServiceWorkerCommand {
      * @returns {Promise<void>}
      */
     async #setInstallConfirmShown() {
-        await this.#settings_api.store(
+        await this.#flux_settings_api.store(
             INSTALL_CONFIRM_SHOWN_SETTINGS_KEY,
             true
         );

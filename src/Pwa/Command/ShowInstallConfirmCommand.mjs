@@ -1,5 +1,5 @@
 /** @typedef {import("../Port/PwaService.mjs").PwaService} PwaService */
-/** @typedef {import("../../../Adapter/Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
+/** @typedef {import("../setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 
 export class ShowInstallConfirmCommand {
     /**

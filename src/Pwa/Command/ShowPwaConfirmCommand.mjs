@@ -1,37 +1,37 @@
-/** @typedef {import("../../../../../flux-css-api/src/Adapter/Api/CssApi.mjs").CssApi} CssApi */
-/** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
-/** @typedef {import("../../../Adapter/Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
+/** @typedef {import("../../../../flux-css-api/src/FluxCssApi.mjs").FluxCssApi} FluxCssApi */
+/** @typedef {import("../../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("../setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 
 export class ShowPwaConfirmCommand {
     /**
-     * @type {CssApi}
+     * @type {FluxCssApi}
      */
-    #css_api;
+    #flux_css_api;
     /**
-     * @type {LocalizationApi}
+     * @type {FluxLocalizationApi}
      */
-    #localization_api;
+    #flux_localization_api;
 
     /**
-     * @param {CssApi} css_api
-     * @param {LocalizationApi} localization_api
+     * @param {FluxCssApi} flux_css_api
+     * @param {FluxLocalizationApi} flux_localization_api
      * @returns {ShowPwaConfirmCommand}
      */
-    static new(css_api, localization_api) {
+    static new(flux_css_api, flux_localization_api) {
         return new this(
-            css_api,
-            localization_api
+            flux_css_api,
+            flux_localization_api
         );
     }
 
     /**
-     * @param {CssApi} css_api
-     * @param {LocalizationApi} localization_api
+     * @param {FluxCssApi} flux_css_api
+     * @param {FluxLocalizationApi} flux_localization_api
      * @private
      */
-    constructor(css_api, localization_api) {
-        this.#css_api = css_api;
-        this.#localization_api = localization_api;
+    constructor(flux_css_api, flux_localization_api) {
+        this.#flux_css_api = flux_css_api;
+        this.#flux_localization_api = flux_localization_api;
     }
 
     /**
@@ -42,12 +42,12 @@ export class ShowPwaConfirmCommand {
      * @returns {Promise<boolean>}
      */
     async showPwaConfirm(info_text, confirm_text, cancel_text, set_hide_confirm = null) {
-        const { PwaConfirmElement } = await import("../../../Adapter/Pwa/PwaConfirmElement.mjs");
+        const { PwaConfirmElement } = await import("../PwaConfirmElement.mjs");
 
         return new Promise(resolve => {
             const confirm_element = PwaConfirmElement.new(
-                this.#css_api,
-                this.#localization_api,
+                this.#flux_css_api,
+                this.#flux_localization_api,
                 document.title,
                 info_text,
                 confirm_text,

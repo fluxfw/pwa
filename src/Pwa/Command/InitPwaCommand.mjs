@@ -1,9 +1,9 @@
-import { CONTENT_TYPE_JSON } from "../../../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
-import { HEADER_ACCEPT } from "../../../../../flux-http-api/src/Header/HEADER.mjs";
-import { HttpClientRequest } from "../../../../../flux-http-api/src/Client/HttpClientRequest.mjs";
+import { CONTENT_TYPE_JSON } from "../../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
+import { HEADER_ACCEPT } from "../../../../flux-http-api/src/Header/HEADER.mjs";
+import { HttpClientRequest } from "../../../../flux-http-api/src/Client/HttpClientRequest.mjs";
 
-/** @typedef {import("../../../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("../../../../../flux-localization-api/src/Adapter/Api/LocalizationApi.mjs").LocalizationApi} LocalizationApi */
+/** @typedef {import("../../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
+/** @typedef {import("../../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 
 export class InitPwaCommand {
     /**
@@ -11,30 +11,30 @@ export class InitPwaCommand {
      */
     #flux_http_api;
     /**
-     * @type {LocalizationApi}
+     * @type {FluxLocalizationApi}
      */
-    #localization_api;
+    #flux_localization_api;
 
     /**
      * @param {FluxHttpApi} flux_http_api
-     * @param {LocalizationApi} localization_api
+     * @param {FluxLocalizationApi} flux_localization_api
      * @returns {InitPwaCommand}
      */
-    static new(flux_http_api, localization_api) {
+    static new(flux_http_api, flux_localization_api) {
         return new this(
             flux_http_api,
-            localization_api
+            flux_localization_api
         );
     }
 
     /**
      * @param {FluxHttpApi} flux_http_api
-     * @param {LocalizationApi} localization_api
+     * @param {FluxLocalizationApi} flux_localization_api
      * @private
      */
-    constructor(flux_http_api, localization_api) {
+    constructor(flux_http_api, flux_localization_api) {
         this.#flux_http_api = flux_http_api;
-        this.#localization_api = localization_api;
+        this.#flux_localization_api = flux_localization_api;
     }
 
     /**
@@ -43,7 +43,7 @@ export class InitPwaCommand {
      */
     async initPwa(manifest_json_file) {
         const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
-        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
+        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#flux_localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
 
         let manifest, _manifest_json_file;
         try {

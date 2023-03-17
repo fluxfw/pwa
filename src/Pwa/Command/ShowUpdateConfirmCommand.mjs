@@ -1,35 +1,35 @@
-/** @typedef {import("../../../../../flux-loading-api/src/Adapter/Api/LoadingApi.mjs").LoadingApi} LoadingApi */
+/** @typedef {import("../../../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../Port/PwaService.mjs").PwaService} PwaService */
 
 export class ShowUpdateConfirmCommand {
     /**
-     * @type {LoadingApi}
+     * @type {FluxLoadingApi}
      */
-    #loading_api;
+    #flux_loading_api;
     /**
      * @type {PwaService}
      */
     #pwa_service;
 
     /**
-     * @param {LoadingApi} loading_api
+     * @param {FluxLoadingApi} flux_loading_api
      * @param {PwaService} pwa_service
      * @returns {ShowUpdateConfirmCommand}
      */
-    static new(loading_api, pwa_service) {
+    static new(flux_loading_api, pwa_service) {
         return new this(
-            loading_api,
+            flux_loading_api,
             pwa_service
         );
     }
 
     /**
-     * @param {LoadingApi} loading_api
+     * @param {FluxLoadingApi} flux_loading_api
      * @param {PwaService} pwa_service
      * @private
      */
-    constructor(loading_api, pwa_service) {
-        this.#loading_api = loading_api;
+    constructor(flux_loading_api, pwa_service) {
+        this.#flux_loading_api = flux_loading_api;
         this.#pwa_service = pwa_service;
     }
 
@@ -44,7 +44,7 @@ export class ShowUpdateConfirmCommand {
         );
 
         if (reload) {
-            document.body.appendChild(await this.#loading_api.getFullscreenLoadingElement());
+            document.body.appendChild(await this.#flux_loading_api.getFullscreenLoadingElement());
         }
 
         return reload;
