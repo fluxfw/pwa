@@ -1,12 +1,12 @@
-import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../../Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
-import { SKIP_WAITING } from "../SKIP_WAITING.mjs";
+import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
+import { SKIP_WAITING } from "./SKIP_WAITING.mjs";
 
-/** @typedef {import("../../../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
-/** @typedef {import("../hideConfirm.mjs").hideConfirm} hideConfirm */
-/** @typedef {import("../showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
-/** @typedef {import("../showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
+/** @typedef {import("../../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
+/** @typedef {import("./hideConfirm.mjs").hideConfirm} hideConfirm */
+/** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
+/** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
-export class InitServiceWorkerCommand {
+export class InitServiceWorker {
     /**
      * @type {FluxSettingsApi}
      */
@@ -22,7 +22,7 @@ export class InitServiceWorkerCommand {
 
     /**
      * @param {FluxSettingsApi} flux_settings_api
-     * @returns {InitServiceWorkerCommand}
+     * @returns {InitServiceWorker}
      */
     static new(flux_settings_api) {
         return new this(

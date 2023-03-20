@@ -5,10 +5,9 @@ import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs
 /** @typedef {import("../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 /** @typedef {import("../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
-/** @typedef {import("./Pwa/Port/PwaService.mjs").PwaService} PwaService */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
-/** @typedef {import("./Pwa/showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
-/** @typedef {import("./Pwa/showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
+/** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
+/** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
 
@@ -33,10 +32,6 @@ export class FluxPwaApi {
      * @type {FluxSettingsApi | null}
      */
     #flux_settings_api;
-    /**
-     * @type {PwaService | null}
-     */
-    #pwa_service = null;
 
     /**
      * @param {FluxCssApi | null} flux_css_api
@@ -104,9 +99,20 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file) {
-        await (await this.#getPwaService()).initPwa(
-            manifest_json_file
-        );
+        if (this.#flux_http_api === null) {
+            throw new Error("Missing FluxHttpApi");
+        }
+        if (this.#flux_localization_api === null) {
+            throw new Error("Missing FluxLocalizationApi");
+        }
+
+        await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
+            this.#flux_http_api,
+            this.#flux_localization_api
+        )
+            .initPwa(
+                manifest_json_file
+            );
     }
 
     /**
@@ -116,11 +122,18 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null) {
-        await (await this.#getPwaService()).initServiceWorker(
-            service_worker_mjs_file,
-            show_install_confirm,
-            show_update_confirm
-        );
+        if (this.#flux_settings_api === null) {
+            throw new Error("Missing FluxSettingsApi");
+        }
+
+        await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
+            this.#flux_settings_api
+        )
+            .initServiceWorker(
+                service_worker_mjs_file,
+                show_install_confirm,
+                show_update_confirm
+            );
     }
 
     /**
@@ -128,30 +141,53 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showInstallConfirm(set_hide_confirm) {
-        return (await this.#getPwaService()).showInstallConfirm(
-            set_hide_confirm
-        );
+        return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
+            this
+        )
+            .showInstallConfirm(
+                set_hide_confirm
+            );
+    }
+
+    /**
+     * @param {string} info_text
+     * @param {string} confirm_text
+     * @param {string} cancel_text
+     * @param {setHideConfirm | null} set_hide_confirm
+     * @returns {Promise<boolean>}
+     */
+    async showPwaConfirm(info_text, confirm_text, cancel_text, set_hide_confirm = null) {
+        if (this.#flux_css_api === null) {
+            throw new Error("Missing FluxCssApi");
+        }
+        if (this.#flux_localization_api === null) {
+            throw new Error("Missing FluxLocalizationApi");
+        }
+
+        return (await import("./Pwa/ShowPwaConfirm.mjs")).ShowPwaConfirm.new(
+            this.#flux_css_api,
+            this.#flux_localization_api
+        )
+            .showPwaConfirm(
+                info_text,
+                confirm_text,
+                cancel_text,
+                set_hide_confirm
+            );
     }
 
     /**
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        return (await this.#getPwaService()).showUpdateConfirm();
-    }
+        if (this.#flux_loading_api === null) {
+            throw new Error("Missing FluxLoadingApi");
+        }
 
-    /**
-     * @returns {Promise<PwaService>}
-     */
-    async #getPwaService() {
-        this.#pwa_service ??= (await import("./Pwa/Port/PwaService.mjs")).PwaService.new(
-            this.#flux_css_api,
-            this.#flux_http_api,
+        return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
             this.#flux_loading_api,
-            this.#flux_localization_api,
-            this.#flux_settings_api
-        );
-
-        return this.#pwa_service;
+            this
+        )
+            .showUpdateConfirm();
     }
 }

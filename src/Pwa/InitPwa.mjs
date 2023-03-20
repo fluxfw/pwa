@@ -1,11 +1,11 @@
-import { CONTENT_TYPE_JSON } from "../../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
-import { HEADER_ACCEPT } from "../../../../flux-http-api/src/Header/HEADER.mjs";
-import { HttpClientRequest } from "../../../../flux-http-api/src/Client/HttpClientRequest.mjs";
+import { CONTENT_TYPE_JSON } from "../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
+import { HEADER_ACCEPT } from "../../../flux-http-api/src/Header/HEADER.mjs";
+import { HttpClientRequest } from "../../../flux-http-api/src/Client/HttpClientRequest.mjs";
 
-/** @typedef {import("../../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("../../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
+/** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 
-export class InitPwaCommand {
+export class InitPwa {
     /**
      * @type {FluxHttpApi}
      */
@@ -18,7 +18,7 @@ export class InitPwaCommand {
     /**
      * @param {FluxHttpApi} flux_http_api
      * @param {FluxLocalizationApi} flux_localization_api
-     * @returns {InitPwaCommand}
+     * @returns {InitPwa}
      */
     static new(flux_http_api, flux_localization_api) {
         return new this(
