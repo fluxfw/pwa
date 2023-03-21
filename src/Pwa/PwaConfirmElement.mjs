@@ -1,10 +1,14 @@
+import { flux_css_api } from "../../../flux-css-api/src/FluxCssApi.mjs";
 import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("./confirm.mjs").confirm} _confirm */
-/** @typedef {import("../../../flux-css-api/src/FluxCssApi.mjs").FluxCssApi} FluxCssApi */
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 
 const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
+
+const css = await flux_css_api.import(
+    `${__dirname}/PwaConfirmElement.css`
+);
 
 export class PwaConfirmElement extends HTMLElement {
     /**
@@ -19,10 +23,6 @@ export class PwaConfirmElement extends HTMLElement {
      * @type {string}
      */
     #confirm_text;
-    /**
-     * @type {FluxCssApi}
-     */
-    #flux_css_api;
     /**
      * @type {FluxLocalizationApi}
      */
@@ -41,7 +41,6 @@ export class PwaConfirmElement extends HTMLElement {
     #shadow;
 
     /**
-     * @param {FluxCssApi} flux_css_api
      * @param {FluxLocalizationApi} flux_localization_api
      * @param {string} name
      * @param {string} info_text
@@ -50,9 +49,8 @@ export class PwaConfirmElement extends HTMLElement {
      * @param {_confirm} confirm
      * @returns {PwaConfirmElement}
      */
-    static new(flux_css_api, flux_localization_api, name, info_text, confirm_text, cancel_text, confirm) {
+    static new(flux_localization_api, name, info_text, confirm_text, cancel_text, confirm) {
         return new this(
-            flux_css_api,
             flux_localization_api,
             name,
             info_text,
@@ -63,7 +61,6 @@ export class PwaConfirmElement extends HTMLElement {
     }
 
     /**
-     * @param {FluxCssApi} flux_css_api
      * @param {FluxLocalizationApi} flux_localization_api
      * @param {string} name
      * @param {string} info_text
@@ -72,10 +69,9 @@ export class PwaConfirmElement extends HTMLElement {
      * @param {_confirm} confirm
      * @private
      */
-    constructor(flux_css_api, flux_localization_api, name, info_text, confirm_text, cancel_text, confirm) {
+    constructor(flux_localization_api, name, info_text, confirm_text, cancel_text, confirm) {
         super();
 
-        this.#flux_css_api = flux_css_api;
         this.#flux_localization_api = flux_localization_api;
         this.#name = name;
         this.#info_text = info_text;
@@ -84,9 +80,9 @@ export class PwaConfirmElement extends HTMLElement {
         this.#confirm = confirm;
 
         this.#shadow = this.attachShadow({ mode: "closed" });
-        this.#flux_css_api.importCssToRoot(
+        flux_css_api.adopt(
             this.#shadow,
-            `${__dirname}/${this.constructor.name}.css`
+            css
         );
 
         this.#render();

@@ -1,36 +1,27 @@
-/** @typedef {import("../../../flux-css-api/src/FluxCssApi.mjs").FluxCssApi} FluxCssApi */
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 
 export class ShowPwaConfirm {
-    /**
-     * @type {FluxCssApi}
-     */
-    #flux_css_api;
     /**
      * @type {FluxLocalizationApi}
      */
     #flux_localization_api;
 
     /**
-     * @param {FluxCssApi} flux_css_api
      * @param {FluxLocalizationApi} flux_localization_api
      * @returns {ShowPwaConfirm}
      */
-    static new(flux_css_api, flux_localization_api) {
+    static new(flux_localization_api) {
         return new this(
-            flux_css_api,
             flux_localization_api
         );
     }
 
     /**
-     * @param {FluxCssApi} flux_css_api
      * @param {FluxLocalizationApi} flux_localization_api
      * @private
      */
-    constructor(flux_css_api, flux_localization_api) {
-        this.#flux_css_api = flux_css_api;
+    constructor(flux_localization_api) {
         this.#flux_localization_api = flux_localization_api;
     }
 
@@ -46,7 +37,6 @@ export class ShowPwaConfirm {
 
         return new Promise(resolve => {
             const confirm_element = PwaConfirmElement.new(
-                this.#flux_css_api,
                 this.#flux_localization_api,
                 document.title,
                 info_text,

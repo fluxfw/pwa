@@ -1,6 +1,5 @@
 import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs";
 
-/** @typedef {import("../../flux-css-api/src/FluxCssApi.mjs").FluxCssApi} FluxCssApi */
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
@@ -12,11 +11,30 @@ import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs
 
 const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
 
+let flux_css_api = null;
+try {
+    ({
+        flux_css_api
+    } = await import("../../flux-css-api/src/FluxCssApi.mjs"));
+} catch (error) {
+    //console.error(error);
+}
+if (flux_css_api !== null) {
+    flux_css_api.adopt(
+        document,
+        await flux_css_api.import(
+            `${__dirname}/Pwa/PwaVariables.css`
+        )
+    );
+    flux_css_api.adopt(
+        document,
+        await flux_css_api.import(
+            `${__dirname}/Pwa/PwaConfirmVariables.css`
+        )
+    );
+}
+
 export class FluxPwaApi {
-    /**
-     * @type {FluxCssApi | null}
-     */
-    #flux_css_api;
     /**
      * @type {FluxHttpApi | null}
      */
@@ -39,16 +57,14 @@ export class FluxPwaApi {
     #manifests;
 
     /**
-     * @param {FluxCssApi | null} flux_css_api
      * @param {FluxHttpApi | null} flux_http_api
      * @param {FluxLoadingApi | null} flux_loading_api
      * @param {FluxLocalizationApi | null} flux_localization_api
      * @param {FluxSettingsApi | null} flux_settings_api
      * @returns {FluxPwaApi}
      */
-    static new(flux_css_api = null, flux_http_api = null, flux_loading_api = null, flux_localization_api = null, flux_settings_api = null) {
+    static new(flux_http_api = null, flux_loading_api = null, flux_localization_api = null, flux_settings_api = null) {
         return new this(
-            flux_css_api,
             flux_http_api,
             flux_loading_api,
             flux_localization_api,
@@ -57,43 +73,25 @@ export class FluxPwaApi {
     }
 
     /**
-     * @param {FluxCssApi | null} flux_css_api
      * @param {FluxHttpApi | null} flux_http_api
      * @param {FluxLoadingApi | null} flux_loading_api
      * @param {FluxLocalizationApi | null} flux_localization_api
      * @param {FluxSettingsApi | null} flux_settings_api
      * @private
      */
-    constructor(flux_css_api, flux_http_api, flux_loading_api, flux_localization_api, flux_settings_api) {
-        this.#flux_css_api = flux_css_api;
+    constructor(flux_http_api, flux_loading_api, flux_localization_api, flux_settings_api) {
         this.#flux_http_api = flux_http_api;
         this.#flux_loading_api = flux_loading_api;
         this.#flux_localization_api = flux_localization_api;
         this.#flux_settings_api = flux_settings_api;
         this.#manifests = new Map();
-    }
 
-    /**
-     * @returns {Promise<void>}
-     */
-    async init() {
-        if (this.#flux_css_api !== null) {
-            addEventListener("touchstart", () => {
+        addEventListener("touchstart", () => {
 
-            });
-
-            this.#flux_css_api.importCssToRoot(
-                document,
-                `${__dirname}/Pwa/PwaVariables.css`
-            );
-            this.#flux_css_api.importCssToRoot(
-                document,
-                `${__dirname}/Pwa/PwaConfirmVariables.css`
-            );
-        }
+        });
 
         if (this.#flux_localization_api !== null) {
-            await this.#flux_localization_api.addModule(
+            this.#flux_localization_api.addModule(
                 `${__dirname}/Localization`,
                 PWA_LOCALIZATION_MODULE
             );
@@ -164,15 +162,11 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showPwaConfirm(info_text, confirm_text, cancel_text, set_hide_confirm = null) {
-        if (this.#flux_css_api === null) {
-            throw new Error("Missing FluxCssApi");
-        }
         if (this.#flux_localization_api === null) {
             throw new Error("Missing FluxLocalizationApi");
         }
 
         return (await import("./Pwa/ShowPwaConfirm.mjs")).ShowPwaConfirm.new(
-            this.#flux_css_api,
             this.#flux_localization_api
         )
             .showPwaConfirm(
