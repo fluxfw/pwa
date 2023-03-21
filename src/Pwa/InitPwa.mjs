@@ -4,6 +4,7 @@ import { HttpClientRequest } from "../../../flux-http-api/src/Client/HttpClientR
 
 /** @typedef {import("../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 
 export class InitPwa {
     /**
@@ -14,27 +15,35 @@ export class InitPwa {
      * @type {FluxLocalizationApi}
      */
     #flux_localization_api;
+    /**
+     * @type {Map<string, Manifest>}
+     */
+    #manifests;
 
     /**
      * @param {FluxHttpApi} flux_http_api
      * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Map<string, Manifest>} manifests
      * @returns {InitPwa}
      */
-    static new(flux_http_api, flux_localization_api) {
+    static new(flux_http_api, flux_localization_api, manifests) {
         return new this(
             flux_http_api,
-            flux_localization_api
+            flux_localization_api,
+            manifests
         );
     }
 
     /**
      * @param {FluxHttpApi} flux_http_api
      * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Map<string, Manifest>} manifests
      * @private
      */
-    constructor(flux_http_api, flux_localization_api) {
+    constructor(flux_http_api, flux_localization_api, manifests) {
         this.#flux_http_api = flux_http_api;
         this.#flux_localization_api = flux_localization_api;
+        this.#manifests = manifests;
     }
 
     /**
@@ -47,33 +56,17 @@ export class InitPwa {
 
         let manifest, _manifest_json_file;
         try {
-            manifest = await (await this.#flux_http_api.request(
-                HttpClientRequest.new(
-                    new URL(localized_manifest_json_file),
-                    null,
-                    null,
-                    {
-                        [HEADER_ACCEPT]: CONTENT_TYPE_JSON
-                    },
-                    true
-                )
-            )).body.json();
+            manifest = await this.#importManifest(
+                localized_manifest_json_file
+            );
 
             _manifest_json_file = localized_manifest_json_file;
         } catch (error) {
             console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
 
-            manifest = await (await this.#flux_http_api.request(
-                HttpClientRequest.new(
-                    new URL(manifest_json_file),
-                    null,
-                    null,
-                    {
-                        [HEADER_ACCEPT]: CONTENT_TYPE_JSON
-                    },
-                    true
-                )
-            )).body.json();
+            manifest = await this.#importManifest(
+                manifest_json_file
+            );
 
             _manifest_json_file = manifest_json_file;
         }
@@ -96,5 +89,38 @@ export class InitPwa {
         if (!manifest_link.isConnected) {
             document.head.appendChild(manifest_link);
         }
+    }
+
+    /**
+     * @param {string} manifest_json_file
+     * @returns {Promise<Manifest>}
+     */
+    async #importManifest(manifest_json_file) {
+        let manifest = null;
+
+        if (this.#manifests.has(manifest_json_file)) {
+            manifest = structuredClone(this.#manifests.get(manifest_json_file) ?? null);
+        } else {
+            try {
+                manifest = await (await this.#flux_http_api.request(
+                    HttpClientRequest.new(
+                        new URL(manifest_json_file),
+                        null,
+                        null,
+                        {
+                            [HEADER_ACCEPT]: CONTENT_TYPE_JSON
+                        },
+                        true
+                    ))).body.json();
+            } finally {
+                this.#manifests.set(manifest_json_file, manifest);
+            }
+        }
+
+        if (manifest === null) {
+            throw new Error("Invalid manifest");
+        }
+
+        return manifest;
     }
 }

@@ -5,6 +5,7 @@ import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs
 /** @typedef {import("../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 /** @typedef {import("../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
+/** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
@@ -32,6 +33,10 @@ export class FluxPwaApi {
      * @type {FluxSettingsApi | null}
      */
     #flux_settings_api;
+    /**
+     * @type {Map<string, Manifest>}
+     */
+    #manifests;
 
     /**
      * @param {FluxCssApi | null} flux_css_api
@@ -65,6 +70,7 @@ export class FluxPwaApi {
         this.#flux_loading_api = flux_loading_api;
         this.#flux_localization_api = flux_localization_api;
         this.#flux_settings_api = flux_settings_api;
+        this.#manifests = new Map();
     }
 
     /**
@@ -108,7 +114,8 @@ export class FluxPwaApi {
 
         await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#flux_http_api,
-            this.#flux_localization_api
+            this.#flux_localization_api,
+            this.#manifests
         )
             .initPwa(
                 manifest_json_file

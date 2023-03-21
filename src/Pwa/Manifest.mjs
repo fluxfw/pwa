@@ -1,0 +1,3 @@
+/**
+ * @typedef {{[key: string]: *}} Manifest
+ */
