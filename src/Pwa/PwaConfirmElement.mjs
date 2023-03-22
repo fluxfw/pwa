@@ -4,10 +4,16 @@ import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mj
 /** @typedef {import("./confirm.mjs").confirm} _confirm */
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 
-const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
+flux_css_api.adopt(
+    document,
+    await flux_css_api.import(
+        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/PwaConfirmVariables.css`
+    ),
+    true
+);
 
 const css = await flux_css_api.import(
-    `${__dirname}/PwaConfirmElement.css`
+    `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/PwaConfirmElement.css`
 );
 
 export class PwaConfirmElement extends HTMLElement {

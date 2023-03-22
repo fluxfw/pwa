@@ -9,8 +9,6 @@ import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
-const __dirname = import.meta.url.substring(0, import.meta.url.lastIndexOf("/"));
-
 let flux_css_api = null;
 try {
     ({
@@ -23,14 +21,9 @@ if (flux_css_api !== null) {
     flux_css_api.adopt(
         document,
         await flux_css_api.import(
-            `${__dirname}/Pwa/PwaVariables.css`
-        )
-    );
-    flux_css_api.adopt(
-        document,
-        await flux_css_api.import(
-            `${__dirname}/Pwa/PwaConfirmVariables.css`
-        )
+            `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/PwaVariables.css`
+        ),
+        true
     );
 }
 
@@ -92,7 +85,7 @@ export class FluxPwaApi {
 
         if (this.#flux_localization_api !== null) {
             this.#flux_localization_api.addModule(
-                `${__dirname}/Localization`,
+                `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Localization`,
                 PWA_LOCALIZATION_MODULE
             );
         }
