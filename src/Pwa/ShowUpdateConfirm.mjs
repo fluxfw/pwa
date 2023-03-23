@@ -1,35 +1,26 @@
-/** @typedef {import("../../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../FluxPwaApi.mjs").FluxPwaApi} FluxPwaApi */
 
 export class ShowUpdateConfirm {
-    /**
-     * @type {FluxLoadingApi}
-     */
-    #flux_loading_api;
     /**
      * @type {FluxPwaApi}
      */
     #flux_pwa_api;
 
     /**
-     * @param {FluxLoadingApi} flux_loading_api
      * @param {FluxPwaApi} flux_pwa_api
      * @returns {ShowUpdateConfirm}
      */
-    static new(flux_loading_api, flux_pwa_api) {
+    static new(flux_pwa_api) {
         return new this(
-            flux_loading_api,
             flux_pwa_api
         );
     }
 
     /**
-     * @param {FluxLoadingApi} flux_loading_api
      * @param {FluxPwaApi} flux_pwa_api
      * @private
      */
-    constructor(flux_loading_api, flux_pwa_api) {
-        this.#flux_loading_api = flux_loading_api;
+    constructor(flux_pwa_api) {
         this.#flux_pwa_api = flux_pwa_api;
     }
 
@@ -44,7 +35,7 @@ export class ShowUpdateConfirm {
         );
 
         if (reload) {
-            document.body.appendChild(await this.#flux_loading_api.getFullscreenLoadingElement());
+            document.body.appendChild((await import("../../../flux-loading-spinner/src/FluxFullscreenLoadingSpinnerElement.mjs")).FluxFullscreenLoadingSpinnerElement.new());
         }
 
         return reload;

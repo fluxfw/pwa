@@ -1,7 +1,6 @@
 import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("../../flux-loading-api/src/FluxLoadingApi.mjs").FluxLoadingApi} FluxLoadingApi */
 /** @typedef {import("../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
 /** @typedef {import("../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
 /** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
@@ -33,10 +32,6 @@ export class FluxPwaApi {
      */
     #flux_http_api;
     /**
-     * @type {FluxLoadingApi | null}
-     */
-    #flux_loading_api;
-    /**
      * @type {FluxLocalizationApi | null}
      */
     #flux_localization_api;
@@ -51,15 +46,13 @@ export class FluxPwaApi {
 
     /**
      * @param {FluxHttpApi | null} flux_http_api
-     * @param {FluxLoadingApi | null} flux_loading_api
      * @param {FluxLocalizationApi | null} flux_localization_api
      * @param {FluxSettingsApi | null} flux_settings_api
      * @returns {FluxPwaApi}
      */
-    static new(flux_http_api = null, flux_loading_api = null, flux_localization_api = null, flux_settings_api = null) {
+    static new(flux_http_api = null, flux_localization_api = null, flux_settings_api = null) {
         return new this(
             flux_http_api,
-            flux_loading_api,
             flux_localization_api,
             flux_settings_api
         );
@@ -67,14 +60,12 @@ export class FluxPwaApi {
 
     /**
      * @param {FluxHttpApi | null} flux_http_api
-     * @param {FluxLoadingApi | null} flux_loading_api
      * @param {FluxLocalizationApi | null} flux_localization_api
      * @param {FluxSettingsApi | null} flux_settings_api
      * @private
      */
-    constructor(flux_http_api, flux_loading_api, flux_localization_api, flux_settings_api) {
+    constructor(flux_http_api, flux_localization_api, flux_settings_api) {
         this.#flux_http_api = flux_http_api;
-        this.#flux_loading_api = flux_loading_api;
         this.#flux_localization_api = flux_localization_api;
         this.#flux_settings_api = flux_settings_api;
         this.#manifests = new Map();
@@ -174,12 +165,7 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        if (this.#flux_loading_api === null) {
-            throw new Error("Missing FluxLoadingApi");
-        }
-
         return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
-            this.#flux_loading_api,
             this
         )
             .showUpdateConfirm();
