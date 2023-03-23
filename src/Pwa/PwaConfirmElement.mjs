@@ -7,7 +7,7 @@ import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mj
 flux_css_api.adopt(
     document,
     await flux_css_api.import(
-        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/PwaConfirmVariables.css`
+        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/PwaConfirmElementVariables.css`
     ),
     true
 );
@@ -85,7 +85,10 @@ export class PwaConfirmElement extends HTMLElement {
         this.#cancel_text = cancel_text;
         this.#confirm = confirm;
 
-        this.#shadow = this.attachShadow({ mode: "closed" });
+        this.#shadow = this.attachShadow({
+            mode: "closed"
+        });
+
         flux_css_api.adopt(
             this.#shadow,
             css

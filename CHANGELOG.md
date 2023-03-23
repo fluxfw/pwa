@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-03-23-2
+
+Changes:
+
+- Css variables
+
 ## v2023-03-23-1
 
 Changes:

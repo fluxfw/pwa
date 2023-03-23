@@ -1,0 +1,8 @@
+:root {
+    --flux-pwa-confirm-active-button-background-color: var(--flux-color-scheme-foreground, #000000);
+    --flux-pwa-confirm-active-button-foreground-color: var(--flux-color-scheme-background, #ffffff);
+    --flux-pwa-confirm-background-color: var(--flux-color-scheme-accent, #000000);
+    --flux-pwa-confirm-button-background-color: var(--flux-color-scheme-background, #ffffff);
+    --flux-pwa-confirm-button-foreground-color: var(--flux-color-scheme-foreground, #000000);
+    --flux-pwa-confirm-foreground-color: var(--flux-color-scheme-accent-foreground, #ffffff);
+}

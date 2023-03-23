@@ -10,9 +10,9 @@
 
 .container {
     align-items: center;
-    background-color: var(--pwa-confirm-background-color);
+    background-color: var(--flux-pwa-confirm-background-color);
     bottom: 0;
-    color: var(--pwa-confirm-foreground-color);
+    color: var(--flux-pwa-confirm-foreground-color);
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -42,10 +42,10 @@
 
 button {
     -webkit-tap-highlight-color: transparent;
-    background-color: var(--pwa-confirm-button-background-color);
+    background-color: var(--flux-pwa-confirm-button-background-color);
     border: none;
     border-radius: 0;
-    color: var(--pwa-confirm-button-foreground-color);
+    color: var(--flux-pwa-confirm-button-foreground-color);
     font-size: 16px;
     height: 30px;
     line-height: 30px;
@@ -65,8 +65,8 @@ button:disabled {
 
 button:not(:disabled):hover,
 button:not(:disabled):active {
-    background-color: var(--pwa-confirm-active-button-background-color);
-    color: var(--pwa-confirm-active-button-foreground-color);
+    background-color: var(--flux-pwa-confirm-active-button-background-color);
+    color: var(--flux-pwa-confirm-active-button-foreground-color);
 }
 
 @media (max-width: 1000px) {
