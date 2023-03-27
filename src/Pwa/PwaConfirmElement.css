@@ -46,6 +46,7 @@ button {
     border: none;
     border-radius: 0;
     color: var(--flux-pwa-confirm-button-foreground-color);
+    cursor: default;
     font-size: 16px;
     height: 30px;
     line-height: 30px;
