@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-03-27-2
+
+Changes:
+
+- `flux-overlay`
+
 ## v2023-03-27-1
 
 Changes:

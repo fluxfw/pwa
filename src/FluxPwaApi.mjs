@@ -130,33 +130,14 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showInstallConfirm(set_hide_confirm) {
-        return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
-            this
-        )
-            .showInstallConfirm(
-                set_hide_confirm
-            );
-    }
-
-    /**
-     * @param {string} info_text
-     * @param {string} confirm_text
-     * @param {string} cancel_text
-     * @param {setHideConfirm | null} set_hide_confirm
-     * @returns {Promise<boolean>}
-     */
-    async showPwaConfirm(info_text, confirm_text, cancel_text, set_hide_confirm = null) {
         if (this.#flux_localization_api === null) {
             throw new Error("Missing FluxLocalizationApi");
         }
 
-        return (await import("./Pwa/ShowPwaConfirm.mjs")).ShowPwaConfirm.new(
+        return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
             this.#flux_localization_api
         )
-            .showPwaConfirm(
-                info_text,
-                confirm_text,
-                cancel_text,
+            .showInstallConfirm(
                 set_hide_confirm
             );
     }
@@ -165,8 +146,12 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
+        if (this.#flux_localization_api === null) {
+            throw new Error("Missing FluxLocalizationApi");
+        }
+
         return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
-            this
+            this.#flux_localization_api
         )
             .showUpdateConfirm();
     }
