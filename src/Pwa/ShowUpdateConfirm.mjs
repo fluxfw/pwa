@@ -30,14 +30,7 @@ export class ShowUpdateConfirm {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        let resolve_promise;
-
-        const promise = new Promise(resolve => {
-            resolve_promise = resolve;
-        });
-
         const {
-            FLUX_OVERLAY_BUTTON_CLICK_EVENT,
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
@@ -50,6 +43,7 @@ export class ShowUpdateConfirm {
                     name: document.title
                 }
             ),
+            null,
             [
                 {
                     label: await this.#flux_localization_api.translate(
@@ -68,32 +62,18 @@ export class ShowUpdateConfirm {
             ]
         );
 
-        flux_overlay_element.addEventListener(FLUX_OVERLAY_BUTTON_CLICK_EVENT, e => {
-            switch (e.detail.value) {
-                case "force-update":
-                    flux_overlay_element.buttons = flux_overlay_element.buttons.map(button => ({
-                        ...button,
-                        disabled: true
-                    }));
+        switch (await flux_overlay_element.showAndWait(
+            false
+        )) {
+            case "force-update":
+                flux_overlay_element.buttons = true;
+                await flux_overlay_element.showLoading();
+                return true;
 
-                    flux_overlay_element.loading = true;
-
-                    resolve_promise(true);
-                    break;
-
-                case "later":
-                    flux_overlay_element.remove();
-
-                    resolve_promise(false);
-                    break;
-
-                default:
-                    break;
-            }
-        });
-
-        document.body.appendChild(flux_overlay_element);
-
-        return promise;
+            case "later":
+            default:
+                flux_overlay_element.remove();
+                return false;
+        }
     }
 }

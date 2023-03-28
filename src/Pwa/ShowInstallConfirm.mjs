@@ -32,14 +32,7 @@ export class ShowInstallConfirm {
      * @returns {Promise<boolean>}
      */
     async showInstallConfirm(set_hide_confirm) {
-        let resolve_promise;
-
-        const promise = new Promise(resolve => {
-            resolve_promise = resolve;
-        });
-
         const {
-            FLUX_OVERLAY_BUTTON_CLICK_EVENT,
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
@@ -52,6 +45,7 @@ export class ShowInstallConfirm {
                     name: document.title
                 }
             ),
+            null,
             [
                 {
                     label: await this.#flux_localization_api.translate(
@@ -70,20 +64,12 @@ export class ShowInstallConfirm {
             ]
         );
 
-        flux_overlay_element.addEventListener(FLUX_OVERLAY_BUTTON_CLICK_EVENT, e => {
-            flux_overlay_element.remove();
-
-            resolve_promise(e.detail.value === "install");
-        });
-
-        document.body.appendChild(flux_overlay_element);
-
         set_hide_confirm(
             () => {
                 flux_overlay_element.remove();
             }
         );
 
-        return promise;
+        return await flux_overlay_element.showAndWait() === "install";
     }
 }
