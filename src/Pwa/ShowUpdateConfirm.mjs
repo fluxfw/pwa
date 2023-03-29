@@ -62,9 +62,10 @@ export class ShowUpdateConfirm {
             ]
         );
 
-        switch (await flux_overlay_element.showAndWait(
+        switch ((await flux_overlay_element.showAndWait(
+            null,
             false
-        )) {
+        )).button) {
             case "force-update":
                 flux_overlay_element.buttons = true;
                 await flux_overlay_element.showLoading();

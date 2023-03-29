@@ -70,6 +70,6 @@ export class ShowInstallConfirm {
             }
         );
 
-        return await flux_overlay_element.showAndWait() === "install";
+        return (await flux_overlay_element.showAndWait()).button === "install";
     }
 }
