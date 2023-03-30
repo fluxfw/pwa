@@ -49,17 +49,17 @@ export class ShowInstallConfirm {
             [
                 {
                     label: await this.#flux_localization_api.translate(
-                        "Install",
-                        PWA_LOCALIZATION_MODULE
-                    ),
-                    value: "install"
-                },
-                {
-                    label: await this.#flux_localization_api.translate(
                         "Use in browser",
                         PWA_LOCALIZATION_MODULE
                     ),
                     value: "use-in-browser"
+                },
+                {
+                    label: await this.#flux_localization_api.translate(
+                        "Install",
+                        PWA_LOCALIZATION_MODULE
+                    ),
+                    value: "install"
                 }
             ]
         );

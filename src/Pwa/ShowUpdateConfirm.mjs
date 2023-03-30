@@ -47,34 +47,34 @@ export class ShowUpdateConfirm {
             [
                 {
                     label: await this.#flux_localization_api.translate(
-                        "Force update",
-                        PWA_LOCALIZATION_MODULE
-                    ),
-                    value: "force-update"
-                },
-                {
-                    label: await this.#flux_localization_api.translate(
                         "Later",
                         PWA_LOCALIZATION_MODULE
                     ),
                     value: "later"
+                },
+                {
+                    label: await this.#flux_localization_api.translate(
+                        "Force update",
+                        PWA_LOCALIZATION_MODULE
+                    ),
+                    value: "force-update"
                 }
             ]
         );
 
-        switch ((await flux_overlay_element.showAndWait(
+        if ((await flux_overlay_element.showAndWait(
             null,
             false
-        )).button) {
-            case "force-update":
-                flux_overlay_element.buttons = true;
-                await flux_overlay_element.showLoading();
-                return true;
+        )).button === "force-update") {
+            flux_overlay_element.buttons = true;
 
-            case "later":
-            default:
-                flux_overlay_element.remove();
-                return false;
+            await flux_overlay_element.showLoading();
+
+            return true;
+        } else {
+            flux_overlay_element.remove();
+
+            return false;
         }
     }
 }
