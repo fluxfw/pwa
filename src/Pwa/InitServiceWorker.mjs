@@ -115,6 +115,10 @@ export class InitServiceWorker {
 
             this.#hide_confirm = null;
 
+            if (install === null) {
+                return;
+            }
+
             await this.#setInstallConfirmShown();
 
             if (!install) {

@@ -37,7 +37,7 @@ export class ShowUpdateConfirm {
         const flux_overlay_element = FluxOverlayElement.new(
             document.title,
             await this.#flux_localization_api.translate(
-                "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may take up to a minute",
+                "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute",
                 PWA_LOCALIZATION_MODULE,
                 {
                     name: document.title
@@ -57,15 +57,16 @@ export class ShowUpdateConfirm {
                         "Force update",
                         PWA_LOCALIZATION_MODULE
                     ),
-                    value: "force-update"
+                    value: "update"
                 }
             ]
         );
 
-        if ((await flux_overlay_element.showAndWait(
+        if ((await flux_overlay_element.wait(
+            null,
             null,
             false
-        )).button === "force-update") {
+        )).button === "update") {
             flux_overlay_element.buttons = true;
 
             await flux_overlay_element.showLoading();

@@ -127,7 +127,7 @@ export class FluxPwaApi {
 
     /**
      * @param {setHideConfirm} set_hide_confirm
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
         if (this.#flux_localization_api === null) {

@@ -1,8 +1,9 @@
 {
-    "{name} can be installed as PWA": "{name} kann als PWA installiert werden",
-    "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may take up to a minute": "Eine neue Version von {name} ist verfügbar\nDas Update wird automatisch installiert, sobald alle Instanzen geschlossen sind\nDas Update kann versucht erzwungen zu werden, aber das dauert möglicherweise bis zu einer Minute",
+    "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute": "Eine neue Version von {name} ist verfügbar\nDas Update wird automatisch installiert, sobald alle Instanzen geschlossen sind\nDas Update kann versucht erzwungen zu werden, aber das könnte Konflikte verursachen, wenn mehere Instanzen exisitieren, und dauert möglicherweise bis zu einer Minute",
+    "Ask later": "Später nachfragen",
+    "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser": "Möchtest du {name} als PWA installieren?\nDu kannst sie auch später direkt vom Browser aus installieren",
+    "Don't show again": "Nicht erneut anzeigen",
     "Force update": "Aktualisieren erzwingen",
-    "Install": "Installieren",
-    "Later": "Später",
-    "Use in browser": "Im Browser benutzen"
+    "Install as PWA": "Als PWA installieren",
+    "Later": "Später"
 }

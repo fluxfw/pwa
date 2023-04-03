@@ -29,7 +29,7 @@ export class ShowInstallConfirm {
 
     /**
      * @param {setHideConfirm} set_hide_confirm
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
         const {
@@ -39,7 +39,7 @@ export class ShowInstallConfirm {
         const flux_overlay_element = FluxOverlayElement.new(
             document.title,
             await this.#flux_localization_api.translate(
-                "{name} can be installed as PWA",
+                "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
                 PWA_LOCALIZATION_MODULE,
                 {
                     name: document.title
@@ -49,17 +49,24 @@ export class ShowInstallConfirm {
             [
                 {
                     label: await this.#flux_localization_api.translate(
-                        "Use in browser",
-                        PWA_LOCALIZATION_MODULE
-                    ),
-                    value: "use-in-browser"
-                },
-                {
-                    label: await this.#flux_localization_api.translate(
-                        "Install",
+                        "Install as PWA",
                         PWA_LOCALIZATION_MODULE
                     ),
                     value: "install"
+                },
+                {
+                    label: await this.#flux_localization_api.translate(
+                        "Ask later",
+                        PWA_LOCALIZATION_MODULE
+                    ),
+                    value: "later"
+                },
+                {
+                    label: await this.#flux_localization_api.translate(
+                        "Don't show again",
+                        PWA_LOCALIZATION_MODULE
+                    ),
+                    value: "not"
                 }
             ]
         );
@@ -70,6 +77,16 @@ export class ShowInstallConfirm {
             }
         );
 
-        return (await flux_overlay_element.showAndWait()).button === "install";
+        switch ((await flux_overlay_element.wait()).button) {
+            case "install":
+                return true;
+
+            case "not":
+                return false;
+
+            case "later":
+            default:
+                return null;
+        }
     }
 }
