@@ -14,11 +14,15 @@ export class InitServiceWorker {
     /**
      * @type {hideConfirm | null}
      */
-    #hide_confirm = null;
+    #hide_install_confirm = null;
     /**
      * @type {boolean}
      */
     #reload;
+    /**
+     * @type {boolean}
+     */
+    #show_install_confirm_later;
 
     /**
      * @param {FluxSettingsApi} flux_settings_api
@@ -36,6 +40,7 @@ export class InitServiceWorker {
      */
     constructor(flux_settings_api) {
         this.#flux_settings_api = flux_settings_api;
+        this.#show_install_confirm_later = false;
         this.#reload = false;
     }
 
@@ -79,6 +84,15 @@ export class InitServiceWorker {
     }
 
     /**
+     * @returns {void}
+     */
+    #hideInstallConfirm() {
+        if (this.#hide_install_confirm !== null) {
+            this.#hide_install_confirm();
+        }
+    }
+
+    /**
      * @returns {Promise<boolean>}
      */
     async #isInstallConfirmShown() {
@@ -100,22 +114,25 @@ export class InitServiceWorker {
         addEventListener("beforeinstallprompt", async e => {
             e.preventDefault();
 
-            if (await this.#isInstallConfirmShown()) {
+            this.#hideInstallConfirm();
+
+            if (this.#show_install_confirm_later || await this.#isInstallConfirmShown()) {
                 return;
             }
 
             const install = await show_install_confirm(
                 hide_confirm => {
-                    this.#hide_confirm = () => {
-                        this.#hide_confirm = null;
+                    this.#hide_install_confirm = () => {
+                        this.#hide_install_confirm = null;
                         hide_confirm();
                     };
                 }
             );
 
-            this.#hide_confirm = null;
+            this.#hide_install_confirm = null;
 
             if (install === null) {
+                this.#show_install_confirm_later = true;
                 return;
             }
 
@@ -126,8 +143,6 @@ export class InitServiceWorker {
             }
 
             await e.prompt();
-        }, {
-            once: true
         });
 
         if (await this.#isInstallConfirmShown()) {
@@ -144,9 +159,7 @@ export class InitServiceWorker {
         pwa_installed_detector.addEventListener("change", async () => {
             await this.#setInstallConfirmShown();
 
-            if (this.#hide_confirm !== null) {
-                this.#hide_confirm();
-            }
+            this.#hideInstallConfirm();
         }, {
             once: true
         });
