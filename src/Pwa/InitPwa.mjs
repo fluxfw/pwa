@@ -1,5 +1,3 @@
-import { CONTENT_TYPE_JSON } from "../../../flux-http-api/src/ContentType/CONTENT_TYPE.mjs";
-import { HEADER_ACCEPT } from "../../../flux-http-api/src/Header/HEADER.mjs";
 import { HttpClientRequest } from "../../../flux-http-api/src/Client/HttpClientRequest.mjs";
 
 /** @typedef {import("../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
@@ -107,9 +105,7 @@ export class InitPwa {
                         new URL(manifest_json_file),
                         null,
                         null,
-                        {
-                            [HEADER_ACCEPT]: CONTENT_TYPE_JSON
-                        },
+                        null,
                         true
                     ))).body.json();
             } finally {
