@@ -10,7 +10,7 @@ export class InitPwa {
      */
     #flux_http_api;
     /**
-     * @type {FluxLocalizationApi}
+     * @type {FluxLocalizationApi | null}
      */
     #flux_localization_api;
     /**
@@ -20,28 +20,28 @@ export class InitPwa {
 
     /**
      * @param {FluxHttpApi} flux_http_api
-     * @param {FluxLocalizationApi} flux_localization_api
      * @param {Map<string, Manifest>} manifests
+     * @param {FluxLocalizationApi | null} flux_localization_api
      * @returns {InitPwa}
      */
-    static new(flux_http_api, flux_localization_api, manifests) {
+    static new(flux_http_api, manifests, flux_localization_api = null) {
         return new this(
             flux_http_api,
-            flux_localization_api,
-            manifests
+            manifests,
+            flux_localization_api
         );
     }
 
     /**
      * @param {FluxHttpApi} flux_http_api
-     * @param {FluxLocalizationApi} flux_localization_api
      * @param {Map<string, Manifest>} manifests
+     * @param {FluxLocalizationApi | null} flux_localization_api
      * @private
      */
-    constructor(flux_http_api, flux_localization_api, manifests) {
+    constructor(flux_http_api, manifests, flux_localization_api) {
         this.#flux_http_api = flux_http_api;
-        this.#flux_localization_api = flux_localization_api;
         this.#manifests = manifests;
+        this.#flux_localization_api = flux_localization_api;
     }
 
     /**
@@ -49,24 +49,27 @@ export class InitPwa {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file) {
-        const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
-        const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#flux_localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
+        let manifest = null, _manifest_json_file = manifest_json_file;
 
-        let manifest, _manifest_json_file;
-        try {
+        if (this.#flux_localization_api !== null) {
+            const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
+            const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#flux_localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
+
+            try {
+                manifest = await this.#importManifest(
+                    localized_manifest_json_file
+                );
+
+                _manifest_json_file = localized_manifest_json_file;
+            } catch (error) {
+                console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
+            }
+        }
+
+        if (manifest === null) {
             manifest = await this.#importManifest(
-                localized_manifest_json_file
+                _manifest_json_file
             );
-
-            _manifest_json_file = localized_manifest_json_file;
-        } catch (error) {
-            console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
-
-            manifest = await this.#importManifest(
-                manifest_json_file
-            );
-
-            _manifest_json_file = manifest_json_file;
         }
 
         document.documentElement.dir = manifest.dir ?? "";

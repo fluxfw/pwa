@@ -90,14 +90,11 @@ export class FluxPwaApi {
         if (this.#flux_http_api === null) {
             throw new Error("Missing FluxHttpApi");
         }
-        if (this.#flux_localization_api === null) {
-            throw new Error("Missing FluxLocalizationApi");
-        }
 
         await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#flux_http_api,
-            this.#flux_localization_api,
-            this.#manifests
+            this.#manifests,
+            this.#flux_localization_api
         )
             .initPwa(
                 manifest_json_file
