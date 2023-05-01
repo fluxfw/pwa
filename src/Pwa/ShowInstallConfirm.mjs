@@ -45,7 +45,6 @@ export class ShowInstallConfirm {
                     name: document.title
                 }
             ),
-            null,
             [
                 {
                     label: await this.#flux_localization_api.translate(

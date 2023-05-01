@@ -43,7 +43,6 @@ export class ShowUpdateConfirm {
                     name: document.title
                 }
             ),
-            null,
             [
                 {
                     label: await this.#flux_localization_api.translate(
