@@ -17,13 +17,11 @@ try {
     //console.error(error);
 }
 if (flux_css_api !== null) {
-    flux_css_api.adopt(
-        document,
-        await flux_css_api.import(
-            `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/PwaVariables.css`
-        ),
-        true
+    const variables_css = await flux_css_api.import(
+        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/PwaVariables.css`
     );
+
+    document.adoptedStyleSheets.unshift(variables_css);
 }
 
 export class FluxPwaApi {
