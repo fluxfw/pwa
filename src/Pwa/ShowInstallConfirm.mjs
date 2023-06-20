@@ -1,6 +1,7 @@
 import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 
 export class ShowInstallConfirm {
@@ -28,21 +29,22 @@ export class ShowInstallConfirm {
     }
 
     /**
+     * @param {Manifest} manifest
      * @param {setHideConfirm} set_hide_confirm
      * @returns {Promise<boolean | null>}
      */
-    async showInstallConfirm(set_hide_confirm) {
+    async showInstallConfirm(manifest, set_hide_confirm) {
         const {
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
         const flux_overlay_element = FluxOverlayElement.new(
-            document.title,
+            manifest.name ?? "",
             await this.#flux_localization_api.translate(
                 "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
                 PWA_LOCALIZATION_MODULE,
                 {
-                    name: document.title
+                    name: manifest.name ?? ""
                 }
             ),
             [

@@ -38,6 +38,10 @@ export class FluxPwaApi {
      */
     #flux_settings_api;
     /**
+     * @type {Manifest | null}
+     */
+    #manifest = null;
+    /**
      * @type {Map<string, Manifest>}
      */
     #manifests;
@@ -81,6 +85,17 @@ export class FluxPwaApi {
     }
 
     /**
+     * @returns {Promise<Manifest>}
+     */
+    async getManifest() {
+        if (this.#manifest === null) {
+            throw new Error("Missing manifest");
+        }
+
+        return this.#manifest;
+    }
+
+    /**
      * @param {string} manifest_json_file
      * @returns {Promise<void>}
      */
@@ -89,7 +104,7 @@ export class FluxPwaApi {
             throw new Error("Missing FluxHttpApi");
         }
 
-        await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
+        this.#manifest = await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#flux_http_api,
             this.#manifests,
             this.#flux_localization_api
@@ -133,6 +148,7 @@ export class FluxPwaApi {
             this.#flux_localization_api
         )
             .showInstallConfirm(
+                await this.getManifest(),
                 set_hide_confirm
             );
     }
@@ -148,6 +164,8 @@ export class FluxPwaApi {
         return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
             this.#flux_localization_api
         )
-            .showUpdateConfirm();
+            .showUpdateConfirm(
+                await this.getManifest()
+            );
     }
 }

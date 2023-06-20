@@ -46,7 +46,7 @@ export class InitPwa {
 
     /**
      * @param {string} manifest_json_file
-     * @returns {Promise<void>}
+     * @returns {Promise<Manifest>}
      */
     async initPwa(manifest_json_file) {
         let manifest = null, _manifest_json_file = manifest_json_file;
@@ -90,6 +90,8 @@ export class InitPwa {
         if (!manifest_link.isConnected) {
             document.head.appendChild(manifest_link);
         }
+
+        return manifest;
     }
 
     /**

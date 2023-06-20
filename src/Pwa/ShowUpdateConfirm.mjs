@@ -1,6 +1,7 @@
 import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 
 export class ShowUpdateConfirm {
     /**
@@ -27,20 +28,21 @@ export class ShowUpdateConfirm {
     }
 
     /**
+     * @param {Manifest} manifest
      * @returns {Promise<boolean>}
      */
-    async showUpdateConfirm() {
+    async showUpdateConfirm(manifest) {
         const {
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
         const flux_overlay_element = FluxOverlayElement.new(
-            document.title,
+            manifest.name ?? "",
             await this.#flux_localization_api.translate(
                 "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute",
                 PWA_LOCALIZATION_MODULE,
                 {
-                    name: document.title
+                    name: manifest.name ?? ""
                 }
             ),
             [
