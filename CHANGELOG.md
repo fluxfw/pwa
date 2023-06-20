@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-06-20-2
+
+Changes:
+
+- Get manifest
+
 ## v2023-06-20-1
 
 Changes:

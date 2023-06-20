@@ -38,13 +38,15 @@ export class ShowInstallConfirm {
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
+        const name = manifest.name ?? "";
+
         const flux_overlay_element = FluxOverlayElement.new(
-            manifest.name ?? "",
+            name,
             await this.#flux_localization_api.translate(
                 "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
                 PWA_LOCALIZATION_MODULE,
                 {
-                    name: manifest.name ?? ""
+                    name
                 }
             ),
             [

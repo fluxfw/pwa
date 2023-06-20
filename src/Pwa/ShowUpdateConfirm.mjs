@@ -36,13 +36,15 @@ export class ShowUpdateConfirm {
             FluxOverlayElement
         } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
 
+        const name = manifest.name ?? "";
+
         const flux_overlay_element = FluxOverlayElement.new(
-            manifest.name ?? "",
+            name,
             await this.#flux_localization_api.translate(
                 "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute",
                 PWA_LOCALIZATION_MODULE,
                 {
-                    name: manifest.name ?? ""
+                    name
                 }
             ),
             [
