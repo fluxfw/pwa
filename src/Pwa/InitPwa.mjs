@@ -81,14 +81,14 @@ export class InitPwa {
         description_meta.content = manifest.description ?? "";
         description_meta.name = "description";
         if (!description_meta.isConnected) {
-            document.head.appendChild(description_meta);
+            document.head.append(description_meta);
         }
 
         const manifest_link = document.head.querySelector("link[rel=manifest]") ?? document.createElement("link");
         manifest_link.href = _manifest_json_file;
         manifest_link.rel = "manifest";
         if (!manifest_link.isConnected) {
-            document.head.appendChild(manifest_link);
+            document.head.append(manifest_link);
         }
 
         return manifest;

@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-07-10-1
+
+Changes:
+
+- `flux-color-scheme`
+
 ## v2023-06-20-2
 
 Changes:
