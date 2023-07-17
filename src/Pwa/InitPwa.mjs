@@ -1,7 +1,7 @@
 import { HttpClientRequest } from "../../../flux-http-api/src/Client/HttpClientRequest.mjs";
 
 /** @typedef {import("../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 
 export class InitPwa {
@@ -10,9 +10,9 @@ export class InitPwa {
      */
     #flux_http_api;
     /**
-     * @type {FluxLocalizationApi | null}
+     * @type {Localization | null}
      */
-    #flux_localization_api;
+    #localization;
     /**
      * @type {Map<string, Manifest>}
      */
@@ -21,27 +21,27 @@ export class InitPwa {
     /**
      * @param {FluxHttpApi} flux_http_api
      * @param {Map<string, Manifest>} manifests
-     * @param {FluxLocalizationApi | null} flux_localization_api
+     * @param {Localization | null} localization
      * @returns {InitPwa}
      */
-    static new(flux_http_api, manifests, flux_localization_api = null) {
+    static new(flux_http_api, manifests, localization = null) {
         return new this(
             flux_http_api,
             manifests,
-            flux_localization_api
+            localization
         );
     }
 
     /**
      * @param {FluxHttpApi} flux_http_api
      * @param {Map<string, Manifest>} manifests
-     * @param {FluxLocalizationApi | null} flux_localization_api
+     * @param {Localization | null} localization
      * @private
      */
-    constructor(flux_http_api, manifests, flux_localization_api) {
+    constructor(flux_http_api, manifests, localization) {
         this.#flux_http_api = flux_http_api;
         this.#manifests = manifests;
-        this.#flux_localization_api = flux_localization_api;
+        this.#localization = localization;
     }
 
     /**
@@ -51,9 +51,9 @@ export class InitPwa {
     async initPwa(manifest_json_file) {
         let manifest = null, _manifest_json_file = manifest_json_file;
 
-        if (this.#flux_localization_api !== null) {
+        if (this.#localization !== null) {
             const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
-            const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#flux_localization_api.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
+            const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#localization.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
 
             try {
                 manifest = await this.#importManifest(

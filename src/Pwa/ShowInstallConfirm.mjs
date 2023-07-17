@@ -1,31 +1,31 @@
-import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE_PWA } from "../Localization/LOCALIZATION_MODULE.mjs";
 
-/** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 
 export class ShowInstallConfirm {
     /**
-     * @type {FluxLocalizationApi}
+     * @type {Localization}
      */
-    #flux_localization_api;
+    #localization;
 
     /**
-     * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Localization} localization
      * @returns {ShowInstallConfirm}
      */
-    static new(flux_localization_api) {
+    static new(localization) {
         return new this(
-            flux_localization_api
+            localization
         );
     }
 
     /**
-     * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Localization} localization
      * @private
      */
-    constructor(flux_localization_api) {
-        this.#flux_localization_api = flux_localization_api;
+    constructor(localization) {
+        this.#localization = localization;
     }
 
     /**
@@ -42,32 +42,32 @@ export class ShowInstallConfirm {
 
         const flux_overlay_element = FluxOverlayElement.new(
             name,
-            await this.#flux_localization_api.translate(
+            await this.#localization.translate(
                 "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
-                PWA_LOCALIZATION_MODULE,
+                LOCALIZATION_MODULE_PWA,
                 {
                     name
                 }
             ),
             [
                 {
-                    label: await this.#flux_localization_api.translate(
+                    label: await this.#localization.translate(
                         "Install as PWA",
-                        PWA_LOCALIZATION_MODULE
+                        LOCALIZATION_MODULE_PWA
                     ),
                     value: "install"
                 },
                 {
-                    label: await this.#flux_localization_api.translate(
+                    label: await this.#localization.translate(
                         "Ask later",
-                        PWA_LOCALIZATION_MODULE
+                        LOCALIZATION_MODULE_PWA
                     ),
                     value: "later"
                 },
                 {
-                    label: await this.#flux_localization_api.translate(
+                    label: await this.#localization.translate(
                         "Don't show again",
-                        PWA_LOCALIZATION_MODULE
+                        LOCALIZATION_MODULE_PWA
                     ),
                     value: "not"
                 }

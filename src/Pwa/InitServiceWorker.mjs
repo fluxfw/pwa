@@ -1,16 +1,12 @@
-import { INSTALL_CONFIRM_SHOWN_SETTINGS_KEY } from "../Settings/INSTALL_CONFIRM_SHOWN_SETTINGS_KEY.mjs";
+import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "../SettingsStorage/SETTINGS_STORAGE_KEY.mjs";
 import { SKIP_WAITING } from "./SKIP_WAITING.mjs";
 
-/** @typedef {import("../../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
 /** @typedef {import("./hideConfirm.mjs").hideConfirm} hideConfirm */
+/** @typedef {import("../SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorker {
-    /**
-     * @type {FluxSettingsApi}
-     */
-    #flux_settings_api;
     /**
      * @type {hideConfirm | null}
      */
@@ -20,26 +16,30 @@ export class InitServiceWorker {
      */
     #reload;
     /**
+     * @type {SettingsStorage}
+     */
+    #settings_storage;
+    /**
      * @type {boolean}
      */
     #show_install_confirm_later;
 
     /**
-     * @param {FluxSettingsApi} flux_settings_api
+     * @param {SettingsStorage} settings_storage
      * @returns {InitServiceWorker}
      */
-    static new(flux_settings_api) {
+    static new(settings_storage) {
         return new this(
-            flux_settings_api
+            settings_storage
         );
     }
 
     /**
-     * @param {FluxSettingsApi} flux_settings_api
+     * @param {SettingsStorage} settings_storage
      * @private
      */
-    constructor(flux_settings_api) {
-        this.#flux_settings_api = flux_settings_api;
+    constructor(settings_storage) {
+        this.#settings_storage = settings_storage;
         this.#show_install_confirm_later = false;
         this.#reload = false;
     }
@@ -96,8 +96,8 @@ export class InitServiceWorker {
      * @returns {Promise<boolean>}
      */
     async #isInstallConfirmShown() {
-        return this.#flux_settings_api.get(
-            INSTALL_CONFIRM_SHOWN_SETTINGS_KEY,
+        return this.#settings_storage.get(
+            SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN,
             false
         );
     }
@@ -212,8 +212,8 @@ export class InitServiceWorker {
      * @returns {Promise<void>}
      */
     async #setInstallConfirmShown() {
-        await this.#flux_settings_api.store(
-            INSTALL_CONFIRM_SHOWN_SETTINGS_KEY,
+        await this.#settings_storage.store(
+            SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN,
             true
         );
     }

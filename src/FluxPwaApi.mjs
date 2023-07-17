@@ -1,10 +1,10 @@
-import { PWA_LOCALIZATION_MODULE } from "./Localization/_LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE_PWA } from "./Localization/LOCALIZATION_MODULE.mjs";
 
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
-/** @typedef {import("../../flux-settings-api/src/FluxSettingsApi.mjs").FluxSettingsApi} FluxSettingsApi */
+/** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
+/** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
@@ -30,13 +30,9 @@ export class FluxPwaApi {
      */
     #flux_http_api;
     /**
-     * @type {FluxLocalizationApi | null}
+     * @type {Localization | null}
      */
-    #flux_localization_api;
-    /**
-     * @type {FluxSettingsApi | null}
-     */
-    #flux_settings_api;
+    #localization;
     /**
      * @type {Manifest | null}
      */
@@ -45,43 +41,49 @@ export class FluxPwaApi {
      * @type {Map<string, Manifest>}
      */
     #manifests;
+    /**
+     * @type {SettingsStorage | null}
+     */
+    #settings_storage;
 
     /**
      * @param {FluxHttpApi | null} flux_http_api
-     * @param {FluxLocalizationApi | null} flux_localization_api
-     * @param {FluxSettingsApi | null} flux_settings_api
-     * @returns {FluxPwaApi}
+     * @param {Localization | null} localization
+     * @param {SettingsStorage | null} settings_storage
+     * @returns {Promise<FluxPwaApi>}
      */
-    static new(flux_http_api = null, flux_localization_api = null, flux_settings_api = null) {
-        return new this(
+    static async new(flux_http_api = null, localization = null, settings_storage = null) {
+        const flux_pwa_api = new this(
             flux_http_api,
-            flux_localization_api,
-            flux_settings_api
+            localization,
+            settings_storage
         );
+
+        if (flux_pwa_api.#localization !== null) {
+            await flux_pwa_api.#localization.addModule(
+                `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Localization`,
+                LOCALIZATION_MODULE_PWA
+            );
+        }
+
+        return flux_pwa_api;
     }
 
     /**
      * @param {FluxHttpApi | null} flux_http_api
-     * @param {FluxLocalizationApi | null} flux_localization_api
-     * @param {FluxSettingsApi | null} flux_settings_api
+     * @param {Localization | null} localization
+     * @param {SettingsStorage | null} settings_storage
      * @private
      */
-    constructor(flux_http_api, flux_localization_api, flux_settings_api) {
+    constructor(flux_http_api, localization, settings_storage) {
         this.#flux_http_api = flux_http_api;
-        this.#flux_localization_api = flux_localization_api;
-        this.#flux_settings_api = flux_settings_api;
+        this.#localization = localization;
+        this.#settings_storage = settings_storage;
         this.#manifests = new Map();
 
         addEventListener("touchstart", () => {
 
         });
-
-        if (this.#flux_localization_api !== null) {
-            this.#flux_localization_api.addModule(
-                `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Localization`,
-                PWA_LOCALIZATION_MODULE
-            );
-        }
     }
 
     /**
@@ -107,7 +109,7 @@ export class FluxPwaApi {
         this.#manifest = await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#flux_http_api,
             this.#manifests,
-            this.#flux_localization_api
+            this.#localization
         )
             .initPwa(
                 manifest_json_file
@@ -121,12 +123,12 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null) {
-        if (this.#flux_settings_api === null) {
-            throw new Error("Missing FluxSettingsApi");
+        if (this.#settings_storage === null) {
+            throw new Error("Missing SettingsStorage");
         }
 
         await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
-            this.#flux_settings_api
+            this.#settings_storage
         )
             .initServiceWorker(
                 service_worker_mjs_file,
@@ -140,12 +142,12 @@ export class FluxPwaApi {
      * @returns {Promise<boolean | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
-        if (this.#flux_localization_api === null) {
-            throw new Error("Missing FluxLocalizationApi");
+        if (this.#localization === null) {
+            throw new Error("Missing Localization");
         }
 
         return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
-            this.#flux_localization_api
+            this.#localization
         )
             .showInstallConfirm(
                 await this.getManifest(),
@@ -157,12 +159,12 @@ export class FluxPwaApi {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        if (this.#flux_localization_api === null) {
-            throw new Error("Missing FluxLocalizationApi");
+        if (this.#localization === null) {
+            throw new Error("Missing Localization");
         }
 
         return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
-            this.#flux_localization_api
+            this.#localization
         )
             .showUpdateConfirm(
                 await this.getManifest()

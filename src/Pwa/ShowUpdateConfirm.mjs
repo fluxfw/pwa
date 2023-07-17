@@ -1,30 +1,30 @@
-import { PWA_LOCALIZATION_MODULE } from "../Localization/_LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE_PWA } from "../Localization/LOCALIZATION_MODULE.mjs";
 
-/** @typedef {import("../../../flux-localization-api/src/FluxLocalizationApi.mjs").FluxLocalizationApi} FluxLocalizationApi */
+/** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 
 export class ShowUpdateConfirm {
     /**
-     * @type {FluxLocalizationApi}
+     * @type {Localization}
      */
-    #flux_localization_api;
+    #localization;
 
     /**
-     * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Localization} localization
      * @returns {ShowUpdateConfirm}
      */
-    static new(flux_localization_api) {
+    static new(localization) {
         return new this(
-            flux_localization_api
+            localization
         );
     }
 
     /**
-     * @param {FluxLocalizationApi} flux_localization_api
+     * @param {Localization} localization
      * @private
      */
-    constructor(flux_localization_api) {
-        this.#flux_localization_api = flux_localization_api;
+    constructor(localization) {
+        this.#localization = localization;
     }
 
     /**
@@ -40,25 +40,25 @@ export class ShowUpdateConfirm {
 
         const flux_overlay_element = FluxOverlayElement.new(
             name,
-            await this.#flux_localization_api.translate(
+            await this.#localization.translate(
                 "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute",
-                PWA_LOCALIZATION_MODULE,
+                LOCALIZATION_MODULE_PWA,
                 {
                     name
                 }
             ),
             [
                 {
-                    label: await this.#flux_localization_api.translate(
+                    label: await this.#localization.translate(
                         "Later",
-                        PWA_LOCALIZATION_MODULE
+                        LOCALIZATION_MODULE_PWA
                     ),
                     value: "later"
                 },
                 {
-                    label: await this.#flux_localization_api.translate(
+                    label: await this.#localization.translate(
                         "Force update",
-                        PWA_LOCALIZATION_MODULE
+                        LOCALIZATION_MODULE_PWA
                     ),
                     value: "update"
                 }
