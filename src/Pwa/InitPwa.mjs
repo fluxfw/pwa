@@ -46,14 +46,21 @@ export class InitPwa {
 
     /**
      * @param {string} manifest_json_file
+     * @param {string | null} localization_module
      * @returns {Promise<Manifest>}
      */
-    async initPwa(manifest_json_file) {
+    async initPwa(manifest_json_file, localization_module = null) {
         let manifest = null, _manifest_json_file = manifest_json_file;
 
-        if (this.#localization !== null) {
+        if (localization_module !== null) {
+            if (this.#localization === null) {
+                throw new Error("Missing Localization");
+            }
+
             const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
-            const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#localization.getLanguage()).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
+            const localized_manifest_json_file = `${manifest_json_file.substring(0, manifest_json_file_dot_pos)}-${(await this.#localization.getLanguage(
+                localization_module
+            )).language}${manifest_json_file.substring(manifest_json_file_dot_pos)}`;
 
             try {
                 manifest = await this.#importManifest(

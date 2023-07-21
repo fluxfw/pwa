@@ -1,4 +1,5 @@
-import { LOCALIZATION_MODULE_PWA } from "./Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
@@ -61,8 +62,8 @@ export class FluxPwaApi {
 
         if (flux_pwa_api.#localization !== null) {
             await flux_pwa_api.#localization.addModule(
-                `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Localization`,
-                LOCALIZATION_MODULE_PWA
+                LOCALIZATION_MODULE,
+                LOCALIZATIONS
             );
         }
 
@@ -99,9 +100,10 @@ export class FluxPwaApi {
 
     /**
      * @param {string} manifest_json_file
+     * @param {string | null} localization_module
      * @returns {Promise<void>}
      */
-    async initPwa(manifest_json_file) {
+    async initPwa(manifest_json_file, localization_module = null) {
         if (this.#flux_http_api === null) {
             throw new Error("Missing FluxHttpApi");
         }
@@ -112,7 +114,8 @@ export class FluxPwaApi {
             this.#localization
         )
             .initPwa(
-                manifest_json_file
+                manifest_json_file,
+                localization_module
             );
     }
 

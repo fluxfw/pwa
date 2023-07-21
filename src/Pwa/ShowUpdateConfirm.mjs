@@ -1,4 +1,5 @@
-import { LOCALIZATION_MODULE_PWA } from "../Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_KEY_FORCE_UPDATE, LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE } from "../Localization/LOCALIZATION_KEY.mjs";
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
@@ -41,8 +42,8 @@ export class ShowUpdateConfirm {
         const flux_overlay_element = FluxOverlayElement.new(
             name,
             await this.#localization.translate(
-                "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute",
-                LOCALIZATION_MODULE_PWA,
+                LOCALIZATION_MODULE,
+                LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE,
                 {
                     name
                 }
@@ -50,15 +51,15 @@ export class ShowUpdateConfirm {
             [
                 {
                     label: await this.#localization.translate(
-                        "Later",
-                        LOCALIZATION_MODULE_PWA
+                        LOCALIZATION_MODULE,
+                        LOCALIZATION_KEY_LATER
                     ),
                     value: "later"
                 },
                 {
                     label: await this.#localization.translate(
-                        "Force update",
-                        LOCALIZATION_MODULE_PWA
+                        LOCALIZATION_MODULE,
+                        LOCALIZATION_KEY_FORCE_UPDATE
                     ),
                     value: "update"
                 }

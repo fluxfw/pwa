@@ -1,4 +1,5 @@
-import { LOCALIZATION_MODULE_PWA } from "../Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL_AS_PWA, LOCALIZATION_KEY_SHOW_INSTALL_CONFIRM_MESSAGE } from "../Localization/LOCALIZATION_KEY.mjs";
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
@@ -43,8 +44,8 @@ export class ShowInstallConfirm {
         const flux_overlay_element = FluxOverlayElement.new(
             name,
             await this.#localization.translate(
-                "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
-                LOCALIZATION_MODULE_PWA,
+                LOCALIZATION_MODULE,
+                LOCALIZATION_KEY_SHOW_INSTALL_CONFIRM_MESSAGE,
                 {
                     name
                 }
@@ -52,22 +53,22 @@ export class ShowInstallConfirm {
             [
                 {
                     label: await this.#localization.translate(
-                        "Install as PWA",
-                        LOCALIZATION_MODULE_PWA
+                        LOCALIZATION_MODULE,
+                        LOCALIZATION_KEY_INSTALL_AS_PWA
                     ),
                     value: "install"
                 },
                 {
                     label: await this.#localization.translate(
-                        "Ask later",
-                        LOCALIZATION_MODULE_PWA
+                        LOCALIZATION_MODULE,
+                        LOCALIZATION_KEY_ASK_LATER
                     ),
                     value: "later"
                 },
                 {
                     label: await this.#localization.translate(
-                        "Don't show again",
-                        LOCALIZATION_MODULE_PWA
+                        LOCALIZATION_MODULE,
+                        LOCALIZATION_KEY_DON_T_SHOW_AGAIN
                     ),
                     value: "not"
                 }
