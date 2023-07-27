@@ -8,17 +8,18 @@ import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 /** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
+/** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
-let flux_css_api = null;
+let flux_import_css = null;
 try {
     ({
-        flux_css_api
-    } = await import("../../flux-css-api/src/FluxCssApi.mjs"));
+        flux_import_css
+    } = await import("../../flux-style-sheet-manager/src/FluxImportCss.mjs"));
 } catch (error) {
     //console.error(error);
 }
-if (flux_css_api !== null) {
-    const root_css = await flux_css_api.import(
+if (flux_import_css !== null) {
+    const root_css = await flux_import_css.import(
         `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaApiRoot.css`
     );
 
@@ -46,18 +47,24 @@ export class FluxPwaApi {
      * @type {SettingsStorage | null}
      */
     #settings_storage;
+    /**
+     * @type {StyleSheetManager | null}
+     */
+    #style_sheet_manager;
 
     /**
      * @param {FluxHttpApi | null} flux_http_api
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @returns {Promise<FluxPwaApi>}
      */
-    static async new(flux_http_api = null, localization = null, settings_storage = null) {
+    static async new(flux_http_api = null, localization = null, settings_storage = null, style_sheet_manager = null) {
         const flux_pwa_api = new this(
             flux_http_api,
             localization,
-            settings_storage
+            settings_storage,
+            style_sheet_manager
         );
 
         if (flux_pwa_api.#localization !== null) {
@@ -74,12 +81,14 @@ export class FluxPwaApi {
      * @param {FluxHttpApi | null} flux_http_api
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @private
      */
-    constructor(flux_http_api, localization, settings_storage) {
+    constructor(flux_http_api, localization, settings_storage, style_sheet_manager) {
         this.#flux_http_api = flux_http_api;
         this.#localization = localization;
         this.#settings_storage = settings_storage;
+        this.#style_sheet_manager = style_sheet_manager;
         this.#manifests = new Map();
 
         addEventListener("touchstart", () => {
@@ -150,7 +159,8 @@ export class FluxPwaApi {
         }
 
         return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
-            this.#localization
+            this.#localization,
+            this.#style_sheet_manager
         )
             .showInstallConfirm(
                 await this.getManifest(),
@@ -167,7 +177,8 @@ export class FluxPwaApi {
         }
 
         return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
-            this.#localization
+            this.#localization,
+            this.#style_sheet_manager
         )
             .showUpdateConfirm(
                 await this.getManifest()

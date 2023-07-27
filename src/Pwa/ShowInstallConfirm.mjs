@@ -4,29 +4,38 @@ import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZA
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
+/** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 export class ShowInstallConfirm {
     /**
      * @type {Localization}
      */
     #localization;
+    /**
+     * @type {StyleSheetManager | null}
+     */
+    #style_sheet_manager;
 
     /**
      * @param {Localization} localization
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @returns {ShowInstallConfirm}
      */
-    static new(localization) {
+    static new(localization, style_sheet_manager = null) {
         return new this(
-            localization
+            localization,
+            style_sheet_manager
         );
     }
 
     /**
      * @param {Localization} localization
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @private
      */
-    constructor(localization) {
+    constructor(localization, style_sheet_manager) {
         this.#localization = localization;
+        this.#style_sheet_manager = style_sheet_manager;
     }
 
     /**
@@ -35,13 +44,9 @@ export class ShowInstallConfirm {
      * @returns {Promise<boolean | null>}
      */
     async showInstallConfirm(manifest, set_hide_confirm) {
-        const {
-            FluxOverlayElement
-        } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
-
         const name = manifest.name ?? "";
 
-        const flux_overlay_element = FluxOverlayElement.new(
+        const flux_overlay_element = await (await import("../../../flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
             name,
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
@@ -72,7 +77,8 @@ export class ShowInstallConfirm {
                     ),
                     value: "not"
                 }
-            ]
+            ],
+            this.#style_sheet_manager
         );
 
         set_hide_confirm(

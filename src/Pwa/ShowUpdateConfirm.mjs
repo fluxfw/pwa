@@ -3,29 +3,38 @@ import { LOCALIZATION_KEY_FORCE_UPDATE, LOCALIZATION_KEY_LATER, LOCALIZATION_KEY
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
+/** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 export class ShowUpdateConfirm {
     /**
      * @type {Localization}
      */
     #localization;
+    /**
+     * @type {StyleSheetManager | null}
+     */
+    #style_sheet_manager;
 
     /**
      * @param {Localization} localization
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @returns {ShowUpdateConfirm}
      */
-    static new(localization) {
+    static new(localization, style_sheet_manager = null) {
         return new this(
-            localization
+            localization,
+            style_sheet_manager
         );
     }
 
     /**
      * @param {Localization} localization
+     * @param {StyleSheetManager | null} style_sheet_manager
      * @private
      */
-    constructor(localization) {
+    constructor(localization, style_sheet_manager) {
         this.#localization = localization;
+        this.#style_sheet_manager = style_sheet_manager;
     }
 
     /**
@@ -33,13 +42,9 @@ export class ShowUpdateConfirm {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm(manifest) {
-        const {
-            FluxOverlayElement
-        } = await import("../../../flux-overlay/src/FluxOverlayElement.mjs");
-
         const name = manifest.name ?? "";
 
-        const flux_overlay_element = FluxOverlayElement.new(
+        const flux_overlay_element = await (await import("../../../flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
             name,
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
@@ -63,7 +68,8 @@ export class ShowUpdateConfirm {
                     ),
                     value: "update"
                 }
-            ]
+            ],
+            this.#style_sheet_manager
         );
 
         if ((await flux_overlay_element.wait(
