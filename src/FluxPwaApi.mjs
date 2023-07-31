@@ -90,10 +90,6 @@ export class FluxPwaApi {
         this.#settings_storage = settings_storage;
         this.#style_sheet_manager = style_sheet_manager;
         this.#manifests = new Map();
-
-        addEventListener("touchstart", () => {
-
-        });
     }
 
     /**
