@@ -97,7 +97,15 @@ export class FluxPwaApi {
      */
     async getManifest() {
         if (this.#manifest === null) {
-            throw new Error("Missing manifest");
+            await new Promise(resolve => {
+                setTimeout(() => {
+                    resolve();
+                }, 2_000);
+            });
+
+            if (this.#manifest === null) {
+                throw new Error("Missing manifest");
+            }
         }
 
         return this.#manifest;

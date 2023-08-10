@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-08-10-1
+
+Changes:
+
+- Fix update confirm
+
 ## v2023-08-07-1
 
 Changes:

@@ -7,5 +7,5 @@ export const TEXTS_EN = Object.freeze({
     [LOCALIZATION_KEY_INSTALL_AS_PWA]: "Install as PWA",
     [LOCALIZATION_KEY_LATER]: "Later",
     [LOCALIZATION_KEY_SHOW_INSTALL_CONFIRM_MESSAGE]: "Do you wish to install {name} as PWA?\nYou can also install it later directly from your browser",
-    [LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE]: "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute"
+    [LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE]: "A new version of {name} is available\nThe update is installed automatically once all instances are closed\nThe update can be tried to be forced, but this may make conflicts if multiple instances exists and may take up to a minute or may not work"
 });
