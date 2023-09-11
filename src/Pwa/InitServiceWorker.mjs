@@ -52,6 +52,10 @@ export class InitServiceWorker {
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null) {
         try {
+            if ((globalThis.serviceWorker?.register ?? null) === null) {
+                return;
+            }
+
             if (show_install_confirm !== null) {
                 await this.#registerInstallConfirm(
                     show_install_confirm

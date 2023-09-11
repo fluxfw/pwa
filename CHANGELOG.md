@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-09-11-1
+
+Changes:
+
+- Check available service worker
+
 ## v2023-08-10-1
 
 Changes:
