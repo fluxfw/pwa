@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-10-31-1
+
+Changes:
+
+- Disable select
+
 ## v2023-09-25-1
 
 Changes:
