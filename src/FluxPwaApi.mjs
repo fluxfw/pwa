@@ -2,6 +2,7 @@ import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
 import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
+/** @typedef {import("./Pwa/InstallConfirm.mjs").InstallConfirm} InstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
@@ -31,6 +32,10 @@ export class FluxPwaApi {
      * @type {FluxHttpApi | null}
      */
     #flux_http_api;
+    /**
+     * @type {InstallConfirm | null}
+     */
+    #install_confirm = null;
     /**
      * @type {Localization | null}
      */
@@ -112,6 +117,18 @@ export class FluxPwaApi {
     }
 
     /**
+     * @param {showInstallConfirm | null} show_install_confirm
+     * @param {boolean | null} show_install_confirm_later
+     * @returns {Promise<void>}
+     */
+    async initInstallConfirm(show_install_confirm, show_install_confirm_later = null) {
+        await (await this.#getInstallConfirm()).initInstallConfirm(
+            show_install_confirm,
+            show_install_confirm_later
+        );
+    }
+
+    /**
      * @param {string} manifest_json_file
      * @param {string | null} localization_module
      * @returns {Promise<void>}
@@ -135,20 +152,18 @@ export class FluxPwaApi {
     /**
      * @param {string} service_worker_mjs_file
      * @param {showInstallConfirm | null} show_install_confirm
+     * @param {boolean | null} show_install_confirm_later
      * @param {showUpdateConfirm | null} show_update_confirm
      * @returns {Promise<void>}
      */
-    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null) {
-        if (this.#settings_storage === null) {
-            throw new Error("Missing SettingsStorage");
-        }
-
+    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_install_confirm_later = null, show_update_confirm = null) {
         await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
-            this.#settings_storage
+            this
         )
             .initServiceWorker(
                 service_worker_mjs_file,
                 show_install_confirm,
+                show_install_confirm_later,
                 show_update_confirm
             );
     }
@@ -173,6 +188,13 @@ export class FluxPwaApi {
     }
 
     /**
+     * @returns {Promise<void>}
+     */
+    async showLaterInstallConfirm() {
+        await (await this.#getInstallConfirm()).showLaterInstallConfirm();
+    }
+
+    /**
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
@@ -187,5 +209,22 @@ export class FluxPwaApi {
             .showUpdateConfirm(
                 await this.getManifest()
             );
+    }
+
+    /**
+     * @returns {Promise<InstallConfirm>}
+     */
+    async #getInstallConfirm() {
+        if (this.#install_confirm === null) {
+            if (this.#localization === null) {
+                throw new Error("Missing Localization");
+            }
+
+            this.#install_confirm ??= (await import("./Pwa/InstallConfirm.mjs")).InstallConfirm.new(
+                this.#settings_storage
+            );
+        }
+
+        return this.#install_confirm;
     }
 }

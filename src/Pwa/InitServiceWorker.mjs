@@ -1,56 +1,46 @@
-import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "../SettingsStorage/SETTINGS_STORAGE_KEY.mjs";
 import { SKIP_WAITING } from "./SKIP_WAITING.mjs";
 
-/** @typedef {import("./hideConfirm.mjs").hideConfirm} hideConfirm */
-/** @typedef {import("../SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
+/** @typedef {import("../FluxPwaApi.mjs").FluxPwaApi} FluxPwaApi */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorker {
     /**
-     * @type {hideConfirm | null}
+     * @type {FluxPwaApi}
      */
-    #hide_install_confirm = null;
+    #flux_pwa_api;
     /**
      * @type {boolean}
      */
     #reload;
-    /**
-     * @type {SettingsStorage}
-     */
-    #settings_storage;
-    /**
-     * @type {boolean}
-     */
-    #show_install_confirm_later;
 
     /**
-     * @param {SettingsStorage} settings_storage
+     * @param {FluxPwaApi} flux_pwa_api
      * @returns {InitServiceWorker}
      */
-    static new(settings_storage) {
+    static new(flux_pwa_api) {
         return new this(
-            settings_storage
+            flux_pwa_api
         );
     }
 
     /**
-     * @param {SettingsStorage} settings_storage
+     * @param {FluxPwaApi} flux_pwa_api
      * @private
      */
-    constructor(settings_storage) {
-        this.#settings_storage = settings_storage;
-        this.#show_install_confirm_later = false;
+    constructor(flux_pwa_api) {
+        this.#flux_pwa_api = flux_pwa_api;
         this.#reload = false;
     }
 
     /**
      * @param {string} service_worker_mjs_file
      * @param {showInstallConfirm | null} show_install_confirm
+     * @param {boolean | null} show_install_confirm_later
      * @param {showUpdateConfirm | null} show_update_confirm
      * @returns {Promise<void>}
      */
-    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null) {
+    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_install_confirm_later = null, show_update_confirm = null) {
         try {
             if ((navigator.serviceWorker?.register ?? null) === null) {
                 console.info("serviceWorker is not available");
@@ -58,8 +48,9 @@ export class InitServiceWorker {
             }
 
             if (show_install_confirm !== null) {
-                await this.#registerInstallConfirm(
-                    show_install_confirm
+                await this.#flux_pwa_api.initInstallConfirm(
+                    show_install_confirm,
+                    show_install_confirm_later
                 );
             }
 
@@ -86,88 +77,6 @@ export class InitServiceWorker {
         } catch (error) {
             console.error("Init service worker failed (", error, ")");
         }
-    }
-
-    /**
-     * @returns {void}
-     */
-    #hideInstallConfirm() {
-        if (this.#hide_install_confirm !== null) {
-            this.#hide_install_confirm();
-        }
-    }
-
-    /**
-     * @returns {Promise<boolean>}
-     */
-    async #isInstallConfirmShown() {
-        return this.#settings_storage.get(
-            SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN,
-            false
-        );
-    }
-
-    /**
-     * @param {showInstallConfirm} show_install_confirm
-     * @returns {Promise<void>}
-     */
-    async #registerInstallConfirm(show_install_confirm) {
-        if (!("onbeforeinstallprompt" in globalThis)) {
-            return;
-        }
-
-        addEventListener("beforeinstallprompt", async e => {
-            e.preventDefault();
-
-            this.#hideInstallConfirm();
-
-            if (this.#show_install_confirm_later || await this.#isInstallConfirmShown()) {
-                return;
-            }
-
-            const install = await show_install_confirm(
-                hide_confirm => {
-                    this.#hide_install_confirm = () => {
-                        this.#hide_install_confirm = null;
-                        hide_confirm();
-                    };
-                }
-            );
-
-            this.#hide_install_confirm = null;
-
-            if (install === null) {
-                this.#show_install_confirm_later = true;
-                return;
-            }
-
-            await this.#setInstallConfirmShown();
-
-            if (!install) {
-                return;
-            }
-
-            await e.prompt();
-        });
-
-        if (await this.#isInstallConfirmShown()) {
-            return;
-        }
-
-        const pwa_installed_detector = matchMedia("(display-mode:browser)");
-
-        if (!pwa_installed_detector.matches) {
-            await this.#setInstallConfirmShown();
-            return;
-        }
-
-        pwa_installed_detector.addEventListener("change", async () => {
-            await this.#setInstallConfirmShown();
-
-            this.#hideInstallConfirm();
-        }, {
-            once: true
-        });
     }
 
     /**
@@ -211,16 +120,6 @@ export class InitServiceWorker {
                 show_update_confirm
             );
         }
-    }
-
-    /**
-     * @returns {Promise<void>}
-     */
-    async #setInstallConfirmShown() {
-        await this.#settings_storage.store(
-            SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN,
-            true
-        );
     }
 
     /**

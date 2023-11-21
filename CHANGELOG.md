@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-11-21-1
+
+Changes:
+
+- Seperate install confirm and allow show again if later
+
 ## v2023-10-31-1
 
 Changes:
