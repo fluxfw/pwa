@@ -36,11 +36,11 @@ export class InitServiceWorker {
     /**
      * @param {string} service_worker_mjs_file
      * @param {showInstallConfirm | null} show_install_confirm
-     * @param {boolean | null} show_install_confirm_later
      * @param {showUpdateConfirm | null} show_update_confirm
+     * @param {boolean | null} show_install_confirm_later
      * @returns {Promise<void>}
      */
-    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_install_confirm_later = null, show_update_confirm = null) {
+    async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
         try {
             if ((navigator.serviceWorker?.register ?? null) === null) {
                 console.info("serviceWorker is not available");
