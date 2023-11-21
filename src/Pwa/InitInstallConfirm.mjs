@@ -3,7 +3,7 @@ import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "../SettingsStorage/S
 /** @typedef {import("../SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 
-export class InstallConfirm {
+export class InitInstallConfirm {
     /**
      * @type {(() => void) | null}
      */
@@ -23,7 +23,7 @@ export class InstallConfirm {
 
     /**
      * @param {SettingsStorage} settings_storage
-     * @returns {InstallConfirm}
+     * @returns {InitInstallConfirm}
      */
     static new(settings_storage) {
         return new this(

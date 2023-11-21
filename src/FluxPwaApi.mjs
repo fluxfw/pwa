@@ -2,7 +2,7 @@ import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
 import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 
 /** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
-/** @typedef {import("./Pwa/InstallConfirm.mjs").InstallConfirm} InstallConfirm */
+/** @typedef {import("./Pwa/InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
@@ -33,9 +33,9 @@ export class FluxPwaApi {
      */
     #flux_http_api;
     /**
-     * @type {InstallConfirm | null}
+     * @type {InitInstallConfirm | null}
      */
-    #install_confirm = null;
+    #init_install_confirm = null;
     /**
      * @type {Localization | null}
      */
@@ -122,7 +122,7 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async initInstallConfirm(show_install_confirm, show_install_confirm_later = null) {
-        await (await this.#getInstallConfirm()).initInstallConfirm(
+        await (await this.#getInitInstallConfirm()).initInstallConfirm(
             show_install_confirm,
             show_install_confirm_later
         );
@@ -191,7 +191,7 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async showLaterInstallConfirm() {
-        await (await this.#getInstallConfirm()).showLaterInstallConfirm();
+        await (await this.#getInitInstallConfirm()).showLaterInstallConfirm();
     }
 
     /**
@@ -212,19 +212,19 @@ export class FluxPwaApi {
     }
 
     /**
-     * @returns {Promise<InstallConfirm>}
+     * @returns {Promise<InitInstallConfirm>}
      */
-    async #getInstallConfirm() {
-        if (this.#install_confirm === null) {
+    async #getInitInstallConfirm() {
+        if (this.#init_install_confirm === null) {
             if (this.#localization === null) {
                 throw new Error("Missing Localization");
             }
 
-            this.#install_confirm ??= (await import("./Pwa/InstallConfirm.mjs")).InstallConfirm.new(
+            this.#init_install_confirm ??= (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(
                 this.#settings_storage
             );
         }
 
-        return this.#install_confirm;
+        return this.#init_install_confirm;
     }
 }
