@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-11-22-1
+
+Changes:
+
+- Remove `flux-http-api`
+
 ## v2023-11-21-3
 
 Changes:

@@ -1,14 +1,7 @@
-import { HttpClientRequest } from "../../../flux-http-api/src/Client/HttpClientRequest.mjs";
-
-/** @typedef {import("../../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 
 export class InitPwa {
-    /**
-     * @type {FluxHttpApi}
-     */
-    #flux_http_api;
     /**
      * @type {Localization | null}
      */
@@ -19,27 +12,23 @@ export class InitPwa {
     #manifests;
 
     /**
-     * @param {FluxHttpApi} flux_http_api
      * @param {Map<string, Manifest>} manifests
      * @param {Localization | null} localization
      * @returns {InitPwa}
      */
-    static new(flux_http_api, manifests, localization = null) {
+    static new(manifests, localization = null) {
         return new this(
-            flux_http_api,
             manifests,
             localization
         );
     }
 
     /**
-     * @param {FluxHttpApi} flux_http_api
      * @param {Map<string, Manifest>} manifests
      * @param {Localization | null} localization
      * @private
      */
-    constructor(flux_http_api, manifests, localization) {
-        this.#flux_http_api = flux_http_api;
+    constructor(manifests, localization) {
         this.#manifests = manifests;
         this.#localization = localization;
     }
@@ -109,17 +98,16 @@ export class InitPwa {
         let manifest = null;
 
         if (this.#manifests.has(manifest_json_file)) {
-            manifest = structuredClone(this.#manifests.get(manifest_json_file) ?? null);
+            manifest = this.#manifests.get(manifest_json_file) ?? null;
         } else {
             try {
-                manifest = await (await this.#flux_http_api.request(
-                    HttpClientRequest.new(
-                        new URL(manifest_json_file),
-                        null,
-                        null,
-                        null,
-                        true
-                    ))).body.json();
+                const response = await fetch(manifest_json_file);
+
+                if (!response.ok || !(response.headers.get("Content-Type")?.includes("application/json") ?? false)) {
+                    return Promise.reject(response);
+                }
+
+                manifest = await response.json();
             } finally {
                 this.#manifests.set(manifest_json_file, manifest);
             }

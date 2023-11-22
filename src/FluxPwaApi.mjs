@@ -1,7 +1,6 @@
 import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
 import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 
-/** @typedef {import("../../flux-http-api/src/FluxHttpApi.mjs").FluxHttpApi} FluxHttpApi */
 /** @typedef {import("./Pwa/InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
@@ -29,10 +28,6 @@ if (flux_import_css !== null) {
 
 export class FluxPwaApi {
     /**
-     * @type {FluxHttpApi | null}
-     */
-    #flux_http_api;
-    /**
      * @type {InitInstallConfirm | null}
      */
     #init_install_confirm = null;
@@ -58,15 +53,13 @@ export class FluxPwaApi {
     #style_sheet_manager;
 
     /**
-     * @param {FluxHttpApi | null} flux_http_api
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
      * @returns {Promise<FluxPwaApi>}
      */
-    static async new(flux_http_api = null, localization = null, settings_storage = null, style_sheet_manager = null) {
+    static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
         const flux_pwa_api = new this(
-            flux_http_api,
             localization,
             settings_storage,
             style_sheet_manager
@@ -83,14 +76,12 @@ export class FluxPwaApi {
     }
 
     /**
-     * @param {FluxHttpApi | null} flux_http_api
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
      * @private
      */
-    constructor(flux_http_api, localization, settings_storage, style_sheet_manager) {
-        this.#flux_http_api = flux_http_api;
+    constructor(localization, settings_storage, style_sheet_manager) {
         this.#localization = localization;
         this.#settings_storage = settings_storage;
         this.#style_sheet_manager = style_sheet_manager;
@@ -113,11 +104,11 @@ export class FluxPwaApi {
             }
         }
 
-        return this.#manifest;
+        return structuredClone(this.#manifest);
     }
 
     /**
-     * @param {showInstallConfirm | null} show_install_confirm
+     * @param {showInstallConfirm} show_install_confirm
      * @param {boolean | null} show_install_confirm_later
      * @returns {Promise<void>}
      */
@@ -134,12 +125,7 @@ export class FluxPwaApi {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file, localization_module = null) {
-        if (this.#flux_http_api === null) {
-            throw new Error("Missing FluxHttpApi");
-        }
-
         this.#manifest = await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
-            this.#flux_http_api,
             this.#manifests,
             this.#localization
         )
@@ -216,8 +202,8 @@ export class FluxPwaApi {
      */
     async #getInitInstallConfirm() {
         if (this.#init_install_confirm === null) {
-            if (this.#localization === null) {
-                throw new Error("Missing Localization");
+            if (this.#settings_storage === null) {
+                throw new Error("Missing SettingsStorage");
             }
 
             this.#init_install_confirm ??= (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(

@@ -63,8 +63,6 @@ export class InitInstallConfirm {
 
                 this.#show_install_confirm = null;
 
-                this.#hideInstallConfirm();
-
                 const install = await show_install_confirm(
                     hide_confirm => {
                         this.#hide_install_confirm = () => {
