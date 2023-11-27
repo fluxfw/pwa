@@ -11,6 +11,7 @@ import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 /** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 let flux_import_css = null;
+let root_css = null;
 try {
     ({
         flux_import_css
@@ -19,11 +20,9 @@ try {
     //console.error(error);
 }
 if (flux_import_css !== null) {
-    const root_css = await flux_import_css.import(
+    root_css = await flux_import_css.import(
         `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaApiRoot.css`
     );
-
-    document.adoptedStyleSheets.unshift(root_css);
 }
 
 export class FluxPwaApi {
@@ -59,6 +58,19 @@ export class FluxPwaApi {
      * @returns {Promise<FluxPwaApi>}
      */
     static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
+        if (root_css !== null) {
+            if (style_sheet_manager !== null) {
+                await style_sheet_manager.addRootStyleSheet(
+                    root_css,
+                    true
+                );
+            } else {
+                if (!document.adoptedStyleSheets.includes(root_css)) {
+                    document.adoptedStyleSheets.unshift(root_css);
+                }
+            }
+        }
+
         const flux_pwa_api = new this(
             localization,
             settings_storage,

@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-11-27-1
+
+Changes:
+
+- Fix missing style sheet manager usage for root css
+
 ## v2023-11-22-1
 
 Changes:
