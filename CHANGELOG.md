@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-11-28-1
+
+Changes:
+
+- Renamed to `flux-pwa`
+
 ## v2023-11-27-1
 
 Changes:

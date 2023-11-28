@@ -1,1 +1,1 @@
-export const LOCALIZATION_MODULE = "flux-pwa-api";
+export const LOCALIZATION_MODULE = "flux-pwa";

@@ -21,11 +21,11 @@ try {
 }
 if (flux_import_css !== null) {
     root_css = await flux_import_css.import(
-        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaApiRoot.css`
+        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaRoot.css`
     );
 }
 
-export class FluxPwaApi {
+export class FluxPwa {
     /**
      * @type {InitInstallConfirm | null}
      */
@@ -55,7 +55,7 @@ export class FluxPwaApi {
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
-     * @returns {Promise<FluxPwaApi>}
+     * @returns {Promise<FluxPwa>}
      */
     static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
         if (root_css !== null) {
@@ -71,20 +71,20 @@ export class FluxPwaApi {
             }
         }
 
-        const flux_pwa_api = new this(
+        const flux_pwa = new this(
             localization,
             settings_storage,
             style_sheet_manager
         );
 
-        if (flux_pwa_api.#localization !== null) {
-            await flux_pwa_api.#localization.addModule(
+        if (flux_pwa.#localization !== null) {
+            await flux_pwa.#localization.addModule(
                 LOCALIZATION_MODULE,
                 LOCALIZATIONS
             );
         }
 
-        return flux_pwa_api;
+        return flux_pwa;
     }
 
     /**

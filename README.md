@@ -1,3 +1,3 @@
-# flux-pwa-api
+# flux-pwa
 
 PWA
