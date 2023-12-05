@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2023-12-05-1
+
+Changes:
+
+- Disable pull to refresh page on every element (Inline scroll)
+
 ## v2023-11-28-1
 
 Changes:

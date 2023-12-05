@@ -1,6 +1,5 @@
 body {
     -webkit-user-select: none;
     margin: 0;
-    overscroll-behavior: contain;
     user-select: none;
 }
