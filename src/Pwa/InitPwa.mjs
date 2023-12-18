@@ -104,7 +104,7 @@ export class InitPwa {
                 const response = await fetch(manifest_json_file);
 
                 if (!response.ok || !(response.headers.get("Content-Type")?.includes("application/json") ?? false)) {
-                    return Promise.reject(response);
+                    throw response;
                 }
 
                 manifest = await response.json();
