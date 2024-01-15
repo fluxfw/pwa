@@ -1,5 +1,7 @@
 import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
 import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
+import root_css from "./Pwa/FluxPwaRoot.css" with { type: "css" };
+import shadow_css from "./Pwa/FluxPwaShadow.css" with { type: "css" };
 
 /** @typedef {import("./Pwa/InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
@@ -9,26 +11,6 @@ import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 /** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
-
-let flux_import_css = null;
-let root_css = null;
-let shadow_css = null;
-try {
-    ({
-        flux_import_css
-    } = await import("../../flux-style-sheet-manager/src/FluxImportCss.mjs"));
-} catch (error) {
-    //console.error(error);
-}
-if (flux_import_css !== null) {
-    root_css = await flux_import_css.import(
-        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaRoot.css`
-    );
-
-    shadow_css = await flux_import_css.import(
-        `${import.meta.url.substring(0, import.meta.url.lastIndexOf("/"))}/Pwa/FluxPwaShadow.css`
-    );
-}
 
 export class FluxPwa {
     /**
@@ -63,25 +45,23 @@ export class FluxPwa {
      * @returns {Promise<FluxPwa>}
      */
     static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
-        if (root_css !== null) {
-            if (style_sheet_manager !== null) {
-                await style_sheet_manager.addShadowStyleSheet(
-                    shadow_css,
-                    true
-                );
+        if (style_sheet_manager !== null) {
+            await style_sheet_manager.addShadowStyleSheet(
+                shadow_css,
+                true
+            );
 
-                await style_sheet_manager.addRootStyleSheet(
-                    root_css,
-                    true
-                );
-            } else {
-                if (!document.adoptedStyleSheets.includes(shadow_css)) {
-                    document.adoptedStyleSheets.unshift(shadow_css);
-                }
+            await style_sheet_manager.addRootStyleSheet(
+                root_css,
+                true
+            );
+        } else {
+            if (!document.adoptedStyleSheets.includes(shadow_css)) {
+                document.adoptedStyleSheets.unshift(shadow_css);
+            }
 
-                if (!document.adoptedStyleSheets.includes(root_css)) {
-                    document.adoptedStyleSheets.unshift(root_css);
-                }
+            if (!document.adoptedStyleSheets.includes(root_css)) {
+                document.adoptedStyleSheets.unshift(root_css);
             }
         }
 

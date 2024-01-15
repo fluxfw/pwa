@@ -46,7 +46,7 @@ export class ShowInstallConfirm {
     async showInstallConfirm(manifest, set_hide_confirm) {
         const name = manifest.name ?? "";
 
-        const flux_overlay_element = await (await import("../../../flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
+        const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
             name,
             await this.#localization.translate(
                 LOCALIZATION_MODULE,

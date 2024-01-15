@@ -6,6 +6,13 @@ Changes:
 
 \-
 
+## v2024-01-15-1
+
+Changes:
+
+- Load libraries using NodeJS's module resolver
+- Load css using import attributes
+
 ## v2023-12-18-1
 
 Changes:
