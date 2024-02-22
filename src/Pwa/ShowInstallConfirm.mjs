@@ -81,6 +81,8 @@ export class ShowInstallConfirm {
             this.#style_sheet_manager
         );
 
+        flux_overlay_element.buttons_vertical = true;
+
         set_hide_confirm(
             () => {
                 flux_overlay_element.remove();

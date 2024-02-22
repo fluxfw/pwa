@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2024-02-22-1
+
+Changes:
+
+- Set `buttons_vertical` on install confirm overlay (Before was depended on buttons count)
+
 ## v2024-01-15-1
 
 Changes:
