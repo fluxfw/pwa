@@ -16,9 +16,9 @@ export class InitServiceWorker {
 
     /**
      * @param {FluxPwa} flux_pwa
-     * @returns {InitServiceWorker}
+     * @returns {Promise<InitServiceWorker>}
      */
-    static new(flux_pwa) {
+    static async new(flux_pwa) {
         return new this(
             flux_pwa
         );

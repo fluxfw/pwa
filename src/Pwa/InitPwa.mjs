@@ -14,9 +14,9 @@ export class InitPwa {
     /**
      * @param {Map<string, Manifest>} manifests
      * @param {Localization | null} localization
-     * @returns {InitPwa}
+     * @returns {Promise<InitPwa>}
      */
-    static new(manifests, localization = null) {
+    static async new(manifests, localization = null) {
         return new this(
             manifests,
             localization

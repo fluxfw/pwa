@@ -23,9 +23,9 @@ export class InitInstallConfirm {
 
     /**
      * @param {SettingsStorage} settings_storage
-     * @returns {InitInstallConfirm}
+     * @returns {Promise<InitInstallConfirm>}
      */
-    static new(settings_storage) {
+    static async new(settings_storage) {
         return new this(
             settings_storage
         );

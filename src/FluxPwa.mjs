@@ -131,10 +131,10 @@ export class FluxPwa {
      * @returns {Promise<void>}
      */
     async initPwa(manifest_json_file, localization_module = null) {
-        this.#manifest = await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
+        this.#manifest = await (await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#manifests,
             this.#localization
-        )
+        ))
             .initPwa(
                 manifest_json_file,
                 localization_module
@@ -149,9 +149,9 @@ export class FluxPwa {
      * @returns {Promise<void>}
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
-        await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
+        await (await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
             this
-        )
+        ))
             .initServiceWorker(
                 service_worker_mjs_file,
                 show_install_confirm,
@@ -169,10 +169,10 @@ export class FluxPwa {
             throw new Error("Missing Localization");
         }
 
-        return (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
+        return (await (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
             this.#localization,
             this.#style_sheet_manager
-        )
+        ))
             .showInstallConfirm(
                 await this.getManifest(),
                 set_hide_confirm
@@ -194,10 +194,10 @@ export class FluxPwa {
             throw new Error("Missing Localization");
         }
 
-        return (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
+        return (await (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
             this.#localization,
             this.#style_sheet_manager
-        )
+        ))
             .showUpdateConfirm(
                 await this.getManifest()
             );
@@ -212,7 +212,7 @@ export class FluxPwa {
                 throw new Error("Missing SettingsStorage");
             }
 
-            this.#init_install_confirm ??= (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(
+            this.#init_install_confirm ??= await (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(
                 this.#settings_storage
             );
         }

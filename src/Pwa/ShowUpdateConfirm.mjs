@@ -18,9 +18,9 @@ export class ShowUpdateConfirm {
     /**
      * @param {Localization} localization
      * @param {StyleSheetManager | null} style_sheet_manager
-     * @returns {ShowUpdateConfirm}
+     * @returns {Promise<ShowUpdateConfirm>}
      */
-    static new(localization, style_sheet_manager = null) {
+    static async new(localization, style_sheet_manager = null) {
         return new this(
             localization,
             style_sheet_manager
