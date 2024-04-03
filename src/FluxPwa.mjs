@@ -106,7 +106,7 @@ export class FluxPwa {
             });
 
             if (this.#manifest === null) {
-                throw new Error("Missing manifest");
+                throw new Error("Missing manifest!");
             }
         }
 
@@ -166,7 +166,7 @@ export class FluxPwa {
      */
     async showInstallConfirm(set_hide_confirm) {
         if (this.#localization === null) {
-            throw new Error("Missing Localization");
+            throw new Error("Missing Localization!");
         }
 
         return (await (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
@@ -191,7 +191,7 @@ export class FluxPwa {
      */
     async showUpdateConfirm() {
         if (this.#localization === null) {
-            throw new Error("Missing Localization");
+            throw new Error("Missing Localization!");
         }
 
         return (await (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
@@ -209,7 +209,7 @@ export class FluxPwa {
     async #getInitInstallConfirm() {
         if (this.#init_install_confirm === null) {
             if (this.#settings_storage === null) {
-                throw new Error("Missing SettingsStorage");
+                throw new Error("Missing SettingsStorage!");
             }
 
             this.#init_install_confirm ??= await (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(

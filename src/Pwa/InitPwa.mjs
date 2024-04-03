@@ -43,7 +43,7 @@ export class InitPwa {
 
         if (localization_module !== null) {
             if (this.#localization === null) {
-                throw new Error("Missing Localization");
+                throw new Error("Missing Localization!");
             }
 
             const manifest_json_file_dot_pos = manifest_json_file.lastIndexOf(".");
@@ -58,7 +58,7 @@ export class InitPwa {
 
                 _manifest_json_file = localized_manifest_json_file;
             } catch (error) {
-                console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")");
+                console.error(`Load ${localized_manifest_json_file} failed - Use ${manifest_json_file} as fallback (`, error, ")!");
             }
         }
 
@@ -114,7 +114,7 @@ export class InitPwa {
         }
 
         if (manifest === null) {
-            throw new Error("Invalid manifest");
+            throw new Error("Invalid manifest!");
         }
 
         return manifest;

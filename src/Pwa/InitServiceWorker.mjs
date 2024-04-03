@@ -43,7 +43,7 @@ export class InitServiceWorker {
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
         try {
             if ((navigator.serviceWorker?.register ?? null) === null) {
-                console.info("serviceWorker is not available");
+                console.info("serviceWorker is not available!");
                 return;
             }
 
@@ -75,7 +75,7 @@ export class InitServiceWorker {
                 );
             }
         } catch (error) {
-            console.error("Init service worker failed (", error, ")");
+            console.error("Init service worker failed (", error, ")!");
         }
     }
 
