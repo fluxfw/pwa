@@ -1,5 +1,3 @@
-import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATIONS } from "./Localization/LOCALIZATIONS.mjs";
 import root_css from "./Pwa/FluxPwaRoot.css" with { type: "css" };
 import shadow_css from "./Pwa/FluxPwaShadow.css" with { type: "css" };
 
@@ -65,20 +63,11 @@ export class FluxPwa {
             }
         }
 
-        const flux_pwa = new this(
+        return new this(
             localization,
             settings_storage,
             style_sheet_manager
         );
-
-        if (flux_pwa.#localization !== null) {
-            await flux_pwa.#localization.addModule(
-                LOCALIZATION_MODULE,
-                LOCALIZATIONS
-            );
-        }
-
-        return flux_pwa;
     }
 
     /**
