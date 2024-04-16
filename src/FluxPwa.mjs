@@ -116,17 +116,15 @@ export class FluxPwa {
 
     /**
      * @param {string} manifest_json_file
-     * @param {string | null} localization_module
      * @returns {Promise<void>}
      */
-    async initPwa(manifest_json_file, localization_module = null) {
+    async initPwa(manifest_json_file) {
         this.#manifest = await (await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
             this.#manifests,
             this.#localization
         ))
             .initPwa(
-                manifest_json_file,
-                localization_module
+                manifest_json_file
             );
     }
 
