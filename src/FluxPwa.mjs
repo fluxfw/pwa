@@ -3,7 +3,6 @@ import shadow_css from "./Pwa/FluxPwaShadow.css" with { type: "css" };
 
 /** @typedef {import("./Pwa/InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
-/** @typedef {import("./Pwa/Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 /** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
@@ -19,14 +18,6 @@ export class FluxPwa {
      * @type {Localization | null}
      */
     #localization;
-    /**
-     * @type {Manifest | null}
-     */
-    #manifest = null;
-    /**
-     * @type {Map<string, Manifest>}
-     */
-    #manifests;
     /**
      * @type {SettingsStorage | null}
      */
@@ -80,26 +71,6 @@ export class FluxPwa {
         this.#localization = localization;
         this.#settings_storage = settings_storage;
         this.#style_sheet_manager = style_sheet_manager;
-        this.#manifests = new Map();
-    }
-
-    /**
-     * @returns {Promise<Manifest>}
-     */
-    async getManifest() {
-        if (this.#manifest === null) {
-            await new Promise(resolve => {
-                setTimeout(() => {
-                    resolve();
-                }, 2_000);
-            });
-
-            if (this.#manifest === null) {
-                throw new Error("Missing manifest!");
-            }
-        }
-
-        return structuredClone(this.#manifest);
     }
 
     /**
@@ -112,20 +83,6 @@ export class FluxPwa {
             show_install_confirm,
             show_install_confirm_later
         );
-    }
-
-    /**
-     * @param {string} manifest_json_file
-     * @returns {Promise<void>}
-     */
-    async initPwa(manifest_json_file) {
-        this.#manifest = await (await (await import("./Pwa/InitPwa.mjs")).InitPwa.new(
-            this.#manifests,
-            this.#localization
-        ))
-            .initPwa(
-                manifest_json_file
-            );
     }
 
     /**
@@ -148,10 +105,11 @@ export class FluxPwa {
     }
 
     /**
+     * @param {string} name
      * @param {setHideConfirm} set_hide_confirm
      * @returns {Promise<boolean | null>}
      */
-    async showInstallConfirm(set_hide_confirm) {
+    async showInstallConfirm(name, set_hide_confirm) {
         if (this.#localization === null) {
             throw new Error("Missing Localization!");
         }
@@ -161,7 +119,7 @@ export class FluxPwa {
             this.#style_sheet_manager
         ))
             .showInstallConfirm(
-                await this.getManifest(),
+                name,
                 set_hide_confirm
             );
     }
@@ -174,9 +132,10 @@ export class FluxPwa {
     }
 
     /**
+     * @param {string} name
      * @returns {Promise<boolean>}
      */
-    async showUpdateConfirm() {
+    async showUpdateConfirm(name) {
         if (this.#localization === null) {
             throw new Error("Missing Localization!");
         }
@@ -186,7 +145,7 @@ export class FluxPwa {
             this.#style_sheet_manager
         ))
             .showUpdateConfirm(
-                await this.getManifest()
+                name
             );
     }
 

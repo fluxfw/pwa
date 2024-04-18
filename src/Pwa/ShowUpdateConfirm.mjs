@@ -2,7 +2,6 @@ import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
 import { LOCALIZATION_KEY_FORCE_UPDATE, LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE } from "../Localization/LOCALIZATION_KEY.mjs";
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
-/** @typedef {import("./Manifest.mjs").Manifest} Manifest */
 /** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 export class ShowUpdateConfirm {
@@ -38,12 +37,10 @@ export class ShowUpdateConfirm {
     }
 
     /**
-     * @param {Manifest} manifest
+     * @param {string} name
      * @returns {Promise<boolean>}
      */
-    async showUpdateConfirm(manifest) {
-        const name = manifest.name ?? "";
-
+    async showUpdateConfirm(name) {
         const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
             name,
             await this.#localization.translate(

@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2024-04-18-1
+
+Changes:
+
+- Remove manifest
+
 ## v2024-04-16-1
 
 Changes:
