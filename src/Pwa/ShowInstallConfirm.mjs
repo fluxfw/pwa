@@ -1,5 +1,5 @@
 import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL_AS_PWA, LOCALIZATION_KEY_SHOW_INSTALL_CONFIRM_MESSAGE } from "../Localization/LOCALIZATION_KEY.mjs";
+import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL, LOCALIZATION_KEY_INSTALL_MESSAGE, LOCALIZATION_KEY_INSTALL_TITLE } from "../Localization/LOCALIZATION_KEY.mjs";
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
@@ -38,25 +38,24 @@ export class ShowInstallConfirm {
     }
 
     /**
-     * @param {string} name
      * @param {setHideConfirm} set_hide_confirm
      * @returns {Promise<boolean | null>}
      */
-    async showInstallConfirm(name, set_hide_confirm) {
+    async showInstallConfirm(set_hide_confirm) {
         const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
-            name,
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
-                LOCALIZATION_KEY_SHOW_INSTALL_CONFIRM_MESSAGE,
-                {
-                    name
-                }
+                LOCALIZATION_KEY_INSTALL_TITLE
+            ),
+            await this.#localization.translate(
+                LOCALIZATION_MODULE,
+                LOCALIZATION_KEY_INSTALL_MESSAGE
             ),
             [
                 {
                     label: await this.#localization.translate(
                         LOCALIZATION_MODULE,
-                        LOCALIZATION_KEY_INSTALL_AS_PWA
+                        LOCALIZATION_KEY_INSTALL
                     ),
                     value: "install"
                 },

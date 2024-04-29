@@ -1,5 +1,5 @@
 import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATION_KEY_FORCE_UPDATE, LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE } from "../Localization/LOCALIZATION_KEY.mjs";
+import { LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_UPDATE, LOCALIZATION_KEY_UPDATE_MESSAGE, LOCALIZATION_KEY_UPDATE_TITLE } from "../Localization/LOCALIZATION_KEY.mjs";
 
 /** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
@@ -37,18 +37,17 @@ export class ShowUpdateConfirm {
     }
 
     /**
-     * @param {string} name
      * @returns {Promise<boolean>}
      */
-    async showUpdateConfirm(name) {
+    async showUpdateConfirm() {
         const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
-            name,
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
-                LOCALIZATION_KEY_SHOW_UPDATE_CONFIRM_MESSAGE,
-                {
-                    name
-                }
+                LOCALIZATION_KEY_UPDATE_TITLE
+            ),
+            await this.#localization.translate(
+                LOCALIZATION_MODULE,
+                LOCALIZATION_KEY_UPDATE_MESSAGE
             ),
             [
                 {
@@ -61,7 +60,7 @@ export class ShowUpdateConfirm {
                 {
                     label: await this.#localization.translate(
                         LOCALIZATION_MODULE,
-                        LOCALIZATION_KEY_FORCE_UPDATE
+                        LOCALIZATION_KEY_UPDATE
                     ),
                     value: "update"
                 }

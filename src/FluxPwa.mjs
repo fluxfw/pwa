@@ -105,11 +105,10 @@ export class FluxPwa {
     }
 
     /**
-     * @param {string} name
      * @param {setHideConfirm} set_hide_confirm
      * @returns {Promise<boolean | null>}
      */
-    async showInstallConfirm(name, set_hide_confirm) {
+    async showInstallConfirm(set_hide_confirm) {
         if (this.#localization === null) {
             throw new Error("Missing Localization!");
         }
@@ -119,7 +118,6 @@ export class FluxPwa {
             this.#style_sheet_manager
         ))
             .showInstallConfirm(
-                name,
                 set_hide_confirm
             );
     }
@@ -132,10 +130,9 @@ export class FluxPwa {
     }
 
     /**
-     * @param {string} name
      * @returns {Promise<boolean>}
      */
-    async showUpdateConfirm(name) {
+    async showUpdateConfirm() {
         if (this.#localization === null) {
             throw new Error("Missing Localization!");
         }
@@ -144,9 +141,7 @@ export class FluxPwa {
             this.#localization,
             this.#style_sheet_manager
         ))
-            .showUpdateConfirm(
-                name
-            );
+            .showUpdateConfirm();
     }
 
     /**
