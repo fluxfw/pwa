@@ -1,8 +1,8 @@
-import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_UPDATE, LOCALIZATION_KEY_UPDATE_MESSAGE, LOCALIZATION_KEY_UPDATE_TITLE } from "../Localization/LOCALIZATION_KEY.mjs";
+import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_KEY_LATER, LOCALIZATION_KEY_UPDATE, LOCALIZATION_KEY_UPDATE_MESSAGE, LOCALIZATION_KEY_UPDATE_TITLE } from "./Localization/LOCALIZATION_KEY.mjs";
 
-/** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
-/** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
+/** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
+/** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 export class ShowUpdateConfirm {
     /**
@@ -40,7 +40,7 @@ export class ShowUpdateConfirm {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
+        const overlay_element = await (await import("overlay/src/OverlayElement.mjs")).OverlayElement.new(
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
                 LOCALIZATION_KEY_UPDATE_TITLE
@@ -68,18 +68,18 @@ export class ShowUpdateConfirm {
             this.#style_sheet_manager
         );
 
-        if ((await flux_overlay_element.wait(
+        if ((await overlay_element.wait(
             null,
             null,
             false
         )).button === "update") {
-            flux_overlay_element.buttons = true;
+            overlay_element.buttons = true;
 
-            await flux_overlay_element.showLoading();
+            await overlay_element.showLoading();
 
             return true;
         } else {
-            flux_overlay_element.remove();
+            overlay_element.remove();
 
             return false;
         }

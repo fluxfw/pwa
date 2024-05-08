@@ -1,15 +1,15 @@
-import root_css from "./Pwa/FluxPwaRoot.css" with { type: "css" };
-import shadow_css from "./Pwa/FluxPwaShadow.css" with { type: "css" };
+import root_css from "./PwaRoot.css" with { type: "css" };
+import shadow_css from "./PwaShadow.css" with { type: "css" };
 
-/** @typedef {import("./Pwa/InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
+/** @typedef {import("./InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
-/** @typedef {import("./Pwa/setHideConfirm.mjs").setHideConfirm} setHideConfirm */
+/** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 /** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
-/** @typedef {import("./Pwa/_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
-/** @typedef {import("./Pwa/_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
+/** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
+/** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 /** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
-export class FluxPwa {
+export class Pwa {
     /**
      * @type {InitInstallConfirm | null}
      */
@@ -31,7 +31,7 @@ export class FluxPwa {
      * @param {Localization | null} localization
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
-     * @returns {Promise<FluxPwa>}
+     * @returns {Promise<Pwa>}
      */
     static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
         if (style_sheet_manager !== null) {
@@ -93,7 +93,7 @@ export class FluxPwa {
      * @returns {Promise<void>}
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
-        await (await (await import("./Pwa/InitServiceWorker.mjs")).InitServiceWorker.new(
+        await (await (await import("./InitServiceWorker.mjs")).InitServiceWorker.new(
             this
         ))
             .initServiceWorker(
@@ -113,7 +113,7 @@ export class FluxPwa {
             throw new Error("Missing Localization!");
         }
 
-        return (await (await import("./Pwa/ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
+        return (await (await import("./ShowInstallConfirm.mjs")).ShowInstallConfirm.new(
             this.#localization,
             this.#style_sheet_manager
         ))
@@ -137,7 +137,7 @@ export class FluxPwa {
             throw new Error("Missing Localization!");
         }
 
-        return (await (await import("./Pwa/ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
+        return (await (await import("./ShowUpdateConfirm.mjs")).ShowUpdateConfirm.new(
             this.#localization,
             this.#style_sheet_manager
         ))
@@ -153,7 +153,7 @@ export class FluxPwa {
                 throw new Error("Missing SettingsStorage!");
             }
 
-            this.#init_install_confirm ??= await (await import("./Pwa/InitInstallConfirm.mjs")).InitInstallConfirm.new(
+            this.#init_install_confirm ??= await (await import("./InitInstallConfirm.mjs")).InitInstallConfirm.new(
                 this.#settings_storage
             );
         }

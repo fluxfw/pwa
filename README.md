@@ -1,3 +1,1 @@
-# flux-pwa
-
-PWA
+# pwa

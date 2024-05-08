@@ -1,35 +1,35 @@
 import { SKIP_WAITING } from "./SKIP_WAITING.mjs";
 
-/** @typedef {import("../FluxPwa.mjs").FluxPwa} FluxPwa */
+/** @typedef {import("./Pwa.mjs").Pwa} Pwa */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorker {
     /**
-     * @type {FluxPwa}
+     * @type {Pwa}
      */
-    #flux_pwa;
+    #pwa;
     /**
      * @type {boolean}
      */
     #reload;
 
     /**
-     * @param {FluxPwa} flux_pwa
+     * @param {Pwa} pwa
      * @returns {Promise<InitServiceWorker>}
      */
-    static async new(flux_pwa) {
+    static async new(pwa) {
         return new this(
-            flux_pwa
+            pwa
         );
     }
 
     /**
-     * @param {FluxPwa} flux_pwa
+     * @param {Pwa} pwa
      * @private
      */
-    constructor(flux_pwa) {
-        this.#flux_pwa = flux_pwa;
+    constructor(pwa) {
+        this.#pwa = pwa;
         this.#reload = false;
     }
 
@@ -48,7 +48,7 @@ export class InitServiceWorker {
             }
 
             if (show_install_confirm !== null) {
-                await this.#flux_pwa.initInstallConfirm(
+                await this.#pwa.initInstallConfirm(
                     show_install_confirm,
                     show_install_confirm_later
                 );

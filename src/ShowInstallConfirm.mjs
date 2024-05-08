@@ -1,9 +1,9 @@
-import { LOCALIZATION_MODULE } from "../Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL, LOCALIZATION_KEY_INSTALL_MESSAGE, LOCALIZATION_KEY_INSTALL_TITLE } from "../Localization/LOCALIZATION_KEY.mjs";
+import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
+import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL, LOCALIZATION_KEY_INSTALL_MESSAGE, LOCALIZATION_KEY_INSTALL_TITLE } from "./Localization/LOCALIZATION_KEY.mjs";
 
-/** @typedef {import("../Localization/Localization.mjs").Localization} Localization */
+/** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
-/** @typedef {import("../StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
+/** @typedef {import("./StyleSheetManager/StyleSheetManager.mjs").StyleSheetManager} StyleSheetManager */
 
 export class ShowInstallConfirm {
     /**
@@ -42,7 +42,7 @@ export class ShowInstallConfirm {
      * @returns {Promise<boolean | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
-        const flux_overlay_element = await (await import("flux-overlay/src/FluxOverlayElement.mjs")).FluxOverlayElement.new(
+        const overlay_element = await (await import("overlay/src/OverlayElement.mjs")).OverlayElement.new(
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
                 LOCALIZATION_KEY_INSTALL_TITLE
@@ -77,15 +77,15 @@ export class ShowInstallConfirm {
             this.#style_sheet_manager
         );
 
-        flux_overlay_element.buttons_vertical = true;
+        overlay_element.buttons_vertical = true;
 
         set_hide_confirm(
             () => {
-                flux_overlay_element.remove();
+                overlay_element.remove();
             }
         );
 
-        switch ((await flux_overlay_element.wait()).button) {
+        switch ((await overlay_element.wait()).button) {
             case "install":
                 return true;
 

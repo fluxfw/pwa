@@ -1,6 +1,6 @@
-import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "../SettingsStorage/SETTINGS_STORAGE_KEY.mjs";
+import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "./SettingsStorage/SETTINGS_STORAGE_KEY.mjs";
 
-/** @typedef {import("../SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
+/** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 
 export class InitInstallConfirm {
