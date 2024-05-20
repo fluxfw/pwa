@@ -95,7 +95,7 @@ export class InitInstallConfirm {
             return;
         }
 
-        const pwa_installed_detector = matchMedia("(display-mode:browser)");
+        const pwa_installed_detector = matchMedia("(display-mode: browser)");
 
         if (!pwa_installed_detector.matches) {
             await this.#setInstallConfirmShown();
