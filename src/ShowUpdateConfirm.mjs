@@ -49,6 +49,7 @@ export class ShowUpdateConfirm {
                 LOCALIZATION_MODULE,
                 LOCALIZATION_KEY_UPDATE_MESSAGE
             ),
+            null,
             [
                 {
                     label: await this.#localization.translate(

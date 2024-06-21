@@ -5,7 +5,7 @@ import { SETTINGS_STORAGE_KEY_INSTALL_CONFIRM_SHOWN } from "./SettingsStorage/SE
 
 export class InitInstallConfirm {
     /**
-     * @type {(() => void) | null}
+     * @type {(() => Promise<void>) | null}
      */
     #hide_install_confirm = null;
     /**
@@ -55,24 +55,27 @@ export class InitInstallConfirm {
             e.preventDefault();
 
             this.#show_install_confirm = async () => {
-                this.#hideInstallConfirm();
+                await this.#hideInstallConfirm();
 
                 if (this.#show_install_confirm_later || await this.#isInstallConfirmShown()) {
                     return;
                 }
 
-                this.#show_install_confirm = null;
-
                 const install = await show_install_confirm(
                     hide_confirm => {
-                        this.#hide_install_confirm = () => {
+                        this.#hide_install_confirm = async () => {
                             this.#hide_install_confirm = null;
-                            hide_confirm();
+
+                            await hide_confirm();
                         };
                     }
                 );
 
                 this.#hide_install_confirm = null;
+
+                if (install === -1) {
+                    return;
+                }
 
                 if (install === null) {
                     this.#show_install_confirm_later = true;
@@ -105,7 +108,7 @@ export class InitInstallConfirm {
         pwa_installed_detector.addEventListener("change", async () => {
             await this.#setInstallConfirmShown();
 
-            this.#hideInstallConfirm();
+            await this.#hideInstallConfirm();
         }, {
             once: true
         });
@@ -121,18 +124,22 @@ export class InitInstallConfirm {
 
         this.#show_install_confirm_later = false;
 
-        if (this.#show_install_confirm !== null) {
-            await this.#show_install_confirm();
+        if (this.#show_install_confirm === null) {
+            return;
         }
+
+        await this.#show_install_confirm();
     }
 
     /**
-     * @returns {void}
+     * @returns {Promise<void>}
      */
-    #hideInstallConfirm() {
-        if (this.#hide_install_confirm !== null) {
-            this.#hide_install_confirm();
+    async #hideInstallConfirm() {
+        if (this.#hide_install_confirm === null) {
+            return;
         }
+
+        await this.#hide_install_confirm();
     }
 
     /**

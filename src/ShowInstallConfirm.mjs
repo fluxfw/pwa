@@ -39,7 +39,7 @@ export class ShowInstallConfirm {
 
     /**
      * @param {setHideConfirm} set_hide_confirm
-     * @returns {Promise<boolean | null>}
+     * @returns {Promise<boolean | -1 | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
         const overlay_element = await (await import("overlay/src/OverlayElement.mjs")).OverlayElement.new(
@@ -51,41 +51,48 @@ export class ShowInstallConfirm {
                 LOCALIZATION_MODULE,
                 LOCALIZATION_KEY_INSTALL_MESSAGE
             ),
+            null,
             [
                 {
                     label: await this.#localization.translate(
                         LOCALIZATION_MODULE,
                         LOCALIZATION_KEY_INSTALL
                     ),
-                    value: "install"
+                    value: "install",
+                    wide: true
                 },
                 {
                     label: await this.#localization.translate(
                         LOCALIZATION_MODULE,
                         LOCALIZATION_KEY_ASK_LATER
                     ),
-                    value: "later"
+                    value: "later",
+                    wide: true
                 },
                 {
                     label: await this.#localization.translate(
                         LOCALIZATION_MODULE,
                         LOCALIZATION_KEY_DON_T_SHOW_AGAIN
                     ),
-                    value: "not"
+                    value: "not",
+                    wide: true
                 }
             ],
             this.#style_sheet_manager
         );
 
-        overlay_element.buttons_vertical = true;
-
         set_hide_confirm(
-            () => {
-                overlay_element.remove();
+            async () => {
+                await overlay_element.close(
+                    "hide"
+                );
             }
         );
 
         switch ((await overlay_element.wait()).button) {
+            case "hide":
+                return -1;
+
             case "install":
                 return true;
 

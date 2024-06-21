@@ -1,3 +1,3 @@
 /**
- * @typedef {(hide_confirm: () => void) => void} setHideConfirm
+ * @typedef {(hide_confirm: () => Promise<void>) => void} setHideConfirm
  */

@@ -106,7 +106,7 @@ export class Pwa {
 
     /**
      * @param {setHideConfirm} set_hide_confirm
-     * @returns {Promise<boolean | null>}
+     * @returns {Promise<boolean | -1 | null>}
      */
     async showInstallConfirm(set_hide_confirm) {
         if (this.#localization === null) {

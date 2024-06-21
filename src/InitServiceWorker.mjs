@@ -68,12 +68,14 @@ export class InitServiceWorker {
                 type: "module"
             });
 
-            if (show_update_confirm !== null) {
-                await this.#registerUpdateConfirm(
-                    registration,
-                    show_update_confirm
-                );
+            if (show_update_confirm === null) {
+                return;
             }
+
+            await this.#registerUpdateConfirm(
+                registration,
+                show_update_confirm
+            );
         } catch (error) {
             console.error("Init service worker failed (", error, ")!");
         }
@@ -114,12 +116,14 @@ export class InitServiceWorker {
             once: true
         });
 
-        if (registration.waiting !== null) {
-            this.#showUpdateConfirm(
-                registration,
-                show_update_confirm
-            );
+        if (registration.waiting === null) {
+            return;
         }
+
+        this.#showUpdateConfirm(
+            registration,
+            show_update_confirm
+        );
     }
 
     /**
