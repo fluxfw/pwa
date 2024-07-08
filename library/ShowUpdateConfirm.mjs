@@ -40,7 +40,7 @@ export class ShowUpdateConfirm {
      * @returns {Promise<boolean>}
      */
     async showUpdateConfirm() {
-        const overlay_element = await (await import("overlay/src/OverlayElement.mjs")).OverlayElement.new(
+        const overlay_element = await (await import("overlay/OverlayElement.mjs")).OverlayElement.new(
             await this.#localization.translate(
                 LOCALIZATION_MODULE,
                 LOCALIZATION_KEY_UPDATE_TITLE
