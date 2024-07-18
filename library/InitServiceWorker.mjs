@@ -12,7 +12,7 @@ export class InitServiceWorker {
     /**
      * @type {boolean}
      */
-    #reload;
+    #reload = false;
 
     /**
      * @param {Pwa} pwa
@@ -30,7 +30,6 @@ export class InitServiceWorker {
      */
     constructor(pwa) {
         this.#pwa = pwa;
-        this.#reload = false;
     }
 
     /**
