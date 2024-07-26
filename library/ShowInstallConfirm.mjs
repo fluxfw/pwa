@@ -1,5 +1,5 @@
-import { LOCALIZATION_MODULE } from "./Localization/LOCALIZATION_MODULE.mjs";
-import { LOCALIZATION_KEY_ASK_LATER, LOCALIZATION_KEY_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_INSTALL, LOCALIZATION_KEY_INSTALL_MESSAGE, LOCALIZATION_KEY_INSTALL_TITLE } from "./Localization/LOCALIZATION_KEY.mjs";
+import { LOCALIZATION_MODULE_PWA } from "./Localization/LOCALIZATION_MODULE_PWA.mjs";
+import { LOCALIZATION_KEY_PWA_ASK_LATER, LOCALIZATION_KEY_PWA_DON_T_SHOW_AGAIN, LOCALIZATION_KEY_PWA_INSTALL, LOCALIZATION_KEY_PWA_INSTALL_MESSAGE, LOCALIZATION_KEY_PWA_INSTALL_TITLE } from "./Localization/LOCALIZATION_KEY_PWA.mjs";
 
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
@@ -44,35 +44,35 @@ export class ShowInstallConfirm {
     async showInstallConfirm(set_hide_confirm) {
         const overlay_element = await (await import("overlay/OverlayElement.mjs")).OverlayElement.new(
             await this.#localization.translate(
-                LOCALIZATION_MODULE,
-                LOCALIZATION_KEY_INSTALL_TITLE
+                LOCALIZATION_MODULE_PWA,
+                LOCALIZATION_KEY_PWA_INSTALL_TITLE
             ),
             await this.#localization.translate(
-                LOCALIZATION_MODULE,
-                LOCALIZATION_KEY_INSTALL_MESSAGE
+                LOCALIZATION_MODULE_PWA,
+                LOCALIZATION_KEY_PWA_INSTALL_MESSAGE
             ),
             null,
             [
                 {
                     label: await this.#localization.translate(
-                        LOCALIZATION_MODULE,
-                        LOCALIZATION_KEY_INSTALL
+                        LOCALIZATION_MODULE_PWA,
+                        LOCALIZATION_KEY_PWA_INSTALL
                     ),
                     value: "install",
                     wide: true
                 },
                 {
                     label: await this.#localization.translate(
-                        LOCALIZATION_MODULE,
-                        LOCALIZATION_KEY_ASK_LATER
+                        LOCALIZATION_MODULE_PWA,
+                        LOCALIZATION_KEY_PWA_ASK_LATER
                     ),
                     value: "later",
                     wide: true
                 },
                 {
                     label: await this.#localization.translate(
-                        LOCALIZATION_MODULE,
-                        LOCALIZATION_KEY_DON_T_SHOW_AGAIN
+                        LOCALIZATION_MODULE_PWA,
+                        LOCALIZATION_KEY_PWA_DON_T_SHOW_AGAIN
                     ),
                     value: "not",
                     wide: true
