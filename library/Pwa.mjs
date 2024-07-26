@@ -3,6 +3,7 @@ import shadow_css from "./PwaShadow.css" with { type: "css" };
 
 /** @typedef {import("./InitInstallConfirm.mjs").InitInstallConfirm} InitInstallConfirm */
 /** @typedef {import("./Localization/Localization.mjs").Localization} Localization */
+/** @typedef {import("./Logger/Logger.mjs").Logger} Logger */
 /** @typedef {import("./setHideConfirm.mjs").setHideConfirm} setHideConfirm */
 /** @typedef {import("./SettingsStorage/SettingsStorage.mjs").SettingsStorage} SettingsStorage */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
@@ -19,6 +20,10 @@ export class Pwa {
      */
     #localization;
     /**
+     * @type {Logger}
+     */
+    #logger;
+    /**
      * @type {SettingsStorage | null}
      */
     #settings_storage;
@@ -29,11 +34,12 @@ export class Pwa {
 
     /**
      * @param {Localization | null} localization
+     * @param {Logger | null} logger
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
      * @returns {Promise<Pwa>}
      */
-    static async new(localization = null, settings_storage = null, style_sheet_manager = null) {
+    static async new(localization = null, logger = null, settings_storage = null, style_sheet_manager = null) {
         if (style_sheet_manager !== null) {
             await style_sheet_manager.addShadowStyleSheet(
                 shadow_css,
@@ -56,6 +62,7 @@ export class Pwa {
 
         return new this(
             localization,
+            logger ?? console,
             settings_storage,
             style_sheet_manager
         );
@@ -63,12 +70,14 @@ export class Pwa {
 
     /**
      * @param {Localization | null} localization
+     * @param {Logger} logger
      * @param {SettingsStorage | null} settings_storage
      * @param {StyleSheetManager | null} style_sheet_manager
      * @private
      */
-    constructor(localization, settings_storage, style_sheet_manager) {
+    constructor(localization, logger, settings_storage, style_sheet_manager) {
         this.#localization = localization;
+        this.#logger = logger;
         this.#settings_storage = settings_storage;
         this.#style_sheet_manager = style_sheet_manager;
     }
@@ -94,6 +103,7 @@ export class Pwa {
      */
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
         await (await (await import("./InitServiceWorker.mjs")).InitServiceWorker.new(
+            this.#logger,
             this
         ))
             .initServiceWorker(

@@ -1,10 +1,15 @@
 import { SKIP_WAITING } from "./SKIP_WAITING.mjs";
 
+/** @typedef {import("./Logger/Logger.mjs").Logger} Logger */
 /** @typedef {import("./Pwa.mjs").Pwa} Pwa */
 /** @typedef {import("./_showInstallConfirm.mjs").showInstallConfirm} showInstallConfirm */
 /** @typedef {import("./_showUpdateConfirm.mjs").showUpdateConfirm} showUpdateConfirm */
 
 export class InitServiceWorker {
+    /**
+     * @type {Logger}
+     */
+    #logger;
     /**
      * @type {Pwa}
      */
@@ -15,20 +20,24 @@ export class InitServiceWorker {
     #reload = false;
 
     /**
+     * @param {Logger} logger
      * @param {Pwa} pwa
      * @returns {Promise<InitServiceWorker>}
      */
-    static async new(pwa) {
+    static async new(logger, pwa) {
         return new this(
+            logger,
             pwa
         );
     }
 
     /**
+     * @param {Logger} logger
      * @param {Pwa} pwa
      * @private
      */
-    constructor(pwa) {
+    constructor(logger, pwa) {
+        this.#logger = logger;
         this.#pwa = pwa;
     }
 
@@ -42,7 +51,9 @@ export class InitServiceWorker {
     async initServiceWorker(service_worker_mjs_file, show_install_confirm = null, show_update_confirm = null, show_install_confirm_later = null) {
         try {
             if ((navigator.serviceWorker?.register ?? null) === null) {
-                console.info("serviceWorker is not available!");
+                this.#logger.info(
+                    "serviceWorker is not available!"
+                );
                 return;
             }
 
@@ -76,7 +87,11 @@ export class InitServiceWorker {
                 show_update_confirm
             );
         } catch (error) {
-            console.error("Init service worker failed (", error, ")!");
+            this.#logger.error(
+                "Init service worker failed (",
+                error,
+                ")!"
+            );
         }
     }
 
