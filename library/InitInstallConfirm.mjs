@@ -51,8 +51,8 @@ export class InitInstallConfirm {
 
         this.#show_install_confirm_later = show_install_confirm_later ?? false;
 
-        addEventListener("beforeinstallprompt", async e => {
-            e.preventDefault();
+        addEventListener("beforeinstallprompt", async event => {
+            event.preventDefault();
 
             this.#show_install_confirm = async () => {
                 await this.#hideInstallConfirm();
@@ -88,7 +88,7 @@ export class InitInstallConfirm {
                     return;
                 }
 
-                await e.prompt();
+                await event.prompt();
             };
 
             await this.#show_install_confirm();

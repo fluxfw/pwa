@@ -106,8 +106,8 @@ export class InitServiceWorker {
                 return;
             }
 
-            registration.installing.addEventListener("statechange", e => {
-                if (e.target.state !== "installed") {
+            registration.installing.addEventListener("statechange", event => {
+                if (event.target.state !== "installed") {
                     return;
                 }
 
@@ -118,12 +118,12 @@ export class InitServiceWorker {
             });
         });
 
-        navigator.serviceWorker.addEventListener("controllerchange", async e => {
+        navigator.serviceWorker.addEventListener("controllerchange", async event => {
             if (!this.#reload) {
                 return;
             }
 
-            await e.target.ready;
+            await event.target.ready;
 
             location.reload();
         }, {

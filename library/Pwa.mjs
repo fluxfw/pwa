@@ -12,7 +12,7 @@ import shadow_css from "./PwaShadow.css" with { type: "css" };
 
 export class Pwa {
     /**
-     * @type {InitInstallConfirm | null}
+     * @type {Promise<InitInstallConfirm> | null}
      */
     #init_install_confirm = null;
     /**
@@ -158,15 +158,15 @@ export class Pwa {
      * @returns {Promise<InitInstallConfirm>}
      */
     async #getInitInstallConfirm() {
-        if (this.#init_install_confirm === null) {
+        this.#init_install_confirm ??= (async () => {
             if (this.#settings_storage === null) {
                 throw new Error("Missing SettingsStorage!");
             }
 
-            this.#init_install_confirm ??= await (await import("./InitInstallConfirm.mjs")).InitInstallConfirm.new(
+            return (await import("./InitInstallConfirm.mjs")).InitInstallConfirm.new(
                 this.#settings_storage
             );
-        }
+        })();
 
         return this.#init_install_confirm;
     }

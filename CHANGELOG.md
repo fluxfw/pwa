@@ -6,6 +6,12 @@ Changes:
 
 \-
 
+## v2024-08-05-1
+
+Changes:
+
+- Improve async singletone
+
 ## v2024-07-26-2
 
 Changes:
